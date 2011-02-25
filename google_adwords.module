@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 // User permissions
 define('GOOGLE_ADWORDS_ADMIN_PERM', 'administer google adwords module');

@@ -1,4 +1,3 @@
-// $Id$
 
 Module: Google AdWords Conversion Tracking
 Author: Jason Savino <http://drupal.org/user/411241>
