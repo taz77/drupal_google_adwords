@@ -1,4 +1,7 @@
+;Id:$
+
 name = Google AdWords Conversion
 description = Adds Google AdWords Conversion Tracking javascript code to specific nodes.
 core = 6.x
 package = Analytics
+version = 6.x-1.x

@@ -1,5 +1,5 @@
 <?php
-
+// $Id$
 
 /**
  * Implementation of hook_install().
@@ -7,7 +7,7 @@
 function google_adwords_install() {
   // Create table
   $created = drupal_install_schema('google_adwords');
-  
+
   if ($created) {
     drupal_set_message(t('Google AdWords module installed successfully. You must set <a href="/admin/user/permissions#module-google_adwords">permissions</a> and <a href="/admin/settings/google_adwords">configure</a> the module. '));
   }
@@ -24,7 +24,7 @@ function google_adwords_uninstall() {
 
   // Remove variables
   db_query('DELETE FROM {variable} WHERE name LIKE "google_adwords_%"');
-  
+
   // Remove table
   $deleted = drupal_uninstall_schema('google_adwords');
   if ($deleted) {
@@ -52,24 +52,29 @@ function google_adwords_schema() {
         'default' => 0,
         'description' => t('The {node}.nid to associated with the Google AdWords.'),
       ),
-	    'vid' => array(
-	      'type' => 'int',
-	      'unsigned' => TRUE,
-	      'not null' => TRUE,
-	      'default' => 0,
-	      'description' => t('Primary Key: The {node}.vid associated with the Google AdWords.'),
-	    ),
-      'enabled'=> array(
-	      'type' => 'int',
-	      'description' => t('Useful to turn on and off Google AdWords on a per node basis.'),
-	      'not null' => TRUE,
-	      'unsigned' => TRUE,
-	      'default' => 0,
+      'vid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t('Primary Key: The {node}.vid associated with the Google AdWords.'),
       ),
-			'label' => array(
+      'enabled' => array(
+        'type' => 'int',
+        'description' => t('Useful to turn on and off Google AdWords on a per node basis.'),
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'default' => 0,
+      ),
+      'label' => array(
         'type' => 'varchar',
         'default' => '',
-        'length' => 255,       
+        'length' => 255,
+      ),
+      'format' => array(
+        'type' => 'varchar',
+        'default' => '',
+        'length' => 10,
       ),
     ),
   );
@@ -77,4 +82,10 @@ function google_adwords_schema() {
   return $schema;
 }
 
+function google_adwords_update_6001() {
+  $ret = array();
+  db_add_field($ret, 'google_adwords', 'format', array('type' => 'varchar', 'length' => 10));
+  db_add_field($ret, 'google_adwords', 'color', array('type' => 'varchar', 'length' => 10));
+  return $ret;
+}
 
