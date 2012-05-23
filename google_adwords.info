@@ -1,4 +1,6 @@
 name = Google AdWords Conversion
-description = Adds Google AdWords Conversion Tracking javascript code to specific nodes.
-core = 6.x
-package = Analytics
+description = Adds Google AdWords Conversion Tracking fields and rules.
+core = 7.x
+package = Statistics
+
+recommended = rules

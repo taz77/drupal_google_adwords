@@ -1,217 +1,255 @@
 <?php
+/**
+ * @file
+ * Google Adwords Conversion Tracking Module
+ */
 
 // User permissions
 define('GOOGLE_ADWORDS_ADMIN_PERM', 'administer google adwords module');
 define('GOOGLE_ADWORDS_EDIT_PERM', 'edit google adwords parameters');
 
 /**
- * Implementation of hook_perm().
+ * Implementation of hook_permission().
+ *
+ * @todo Where do we need an permission check? Rules?
  */
 function google_adwords_perm() {
-  return array(GOOGLE_ADWORDS_ADMIN_PERM, GOOGLE_ADWORDS_EDIT_PERM);
+  return array(GOOGLE_ADWORDS_ADMIN_PERM,
+    GOOGLE_ADWORDS_ADMIN_PERM => array(
+      'title' => t('Administer google adwords module.'),
+      'description' => t('Perform administration tasks for google adwords.'),
+    ),
+    GOOGLE_ADWORDS_EDIT_PERM => array(
+      'title' => t('Edit google adwords parameters.'),
+      'description' => t('Edit google adwords parameters.'),
+    ),
+  );
 }
 
-function google_adwords_menu(){
-	$items = array();
-  $items['admin/settings/google_adwords'] = array(
-	  'title' => t('Google AdWords'),
-	  'description' => t('Google AdWords Settings page.'),
-	  'page callback' => 'drupal_get_form',
-	  'page arguments' => array('google_adwords_admin_settings'),
-	  'access arguments' => array(GOOGLE_ADWORDS_ADMIN_PERM),
-	  'file' => 'google_adwords.admin.inc',
+/**
+ * Implements hook_theme().
+ */
+function google_adwords_theme() {
+  return array(
+    'google_adwords_tracking' => array(
+      'variables' => array(),
+    ),
   );
+}
+
+/**
+ * Implements hook_field_info().
+ */
+function google_adwords_field_info() {
+  return array(
+    'google_adwords_tracking' => array(
+      'label' => 'Google Adwords Field',
+      'description' => t('This field stores Google Adwords conversion tracking parameter.'),
+      'default_widget' => 'text_textfield',
+      'default_formatter' => 'default',
+      'property_type' => 'text',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_validate().
+ */
+function google_adwords_field_validate($obj_type, $object, $field, $instance, $langcode, $items, &$errors) {
+  foreach ($items as $delta => $item) {
+    if (!empty($item['conversion_id']) && (!is_numeric($item['conversion_id']) || (int) $item['conversion_id'] != $item['conversion_id'])) {
+      $error = t('%name: The ID value has to be numeric.', array('%name' => $instance['label']));
+      $errors[$field['field_name']][$langcode][$delta][] = array(
+        'error' => $error,
+        'message' => $error,
+      );
+    }
+  }
+  return;
+}
+
+/**
+ * Implements hook_field_is_empty().
+ */
+function google_adwords_field_is_empty($item, $field) {
+  // It makes no sense to store stuff without a conversion id.
+  return empty($item['conversion_id']);
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function google_adwords_field_formatter_info() {
+  $formats = array(
+    'google_adwords_default' => array(
+      'label' => t('Default'),
+      'field types' => array('google_adwords_tracking'),
+    ),
+  );
+  return $formats;
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function google_adwords_field_formatter_view($object_type, $object, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+
+  foreach ($items as $delta => $item) {
+    switch ($display['type']) {
+      case 'google_adwords_default':
+        $element[$delta]['#markup'] = theme('google_adwords_tracking', $item);
+        break;
+    }
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_field_widget_info().
+ */
+function google_adwords_field_widget_info() {
+  return array(
+    'google_adwords_tracking' => array(
+      'label' => t('Google Adwords Tracking Field'),
+      'field types' => array('google_adwords_tracking'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_presave().
+ */
+function google_adwords_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  // Make sure nothing evil can bypass
+  foreach ($items as $delta => &$item) {
+    $item['conversion_id'] = (int) $item['conversion_id'];
+    $item['label'] = filter_xss($item['label']);
+    $item['value'] = filter_xss($item['value']);
+    $item['language'] = filter_xss($item['language']);
+    $item['color'] = filter_xss($item['color']);
+    $item['format'] = filter_xss($item['format']);
+  }
   return $items;
 }
 
 /**
- * Implementation of hook_form_alter().
+ * Implements hook_field_widget_form().
+ *
+ * @todo Create a nicer form element.
  */
-function google_adwords_form_alter(&$form, $form_state, $form_id) {
+function google_adwords_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $base) {
+  $fields = array(
+    'conversion_id' => array('#title' => 'Conversion Id'),
+    'label' => array('#title' => 'Label'),
+    'value' => array('#title' => 'Value'),
+    'language' => array('#title' => 'Language'),
+    'color' => array('#title' => 'Color'),
+    'format' => array('#title' => 'Format'),
+  );
 
-  if ($form_id == 'node_type_form' && isset($form['identity']['type'])) {
-    
-    $form['google_adwords'] = array(
-      '#type' => 'fieldset',
-      '#access' => user_access(GOOGLE_ADWORDS_ADMIN_PERM),
-      '#title' => t('Google AdWords'),
-      '#collapsible' => TRUE,
-      '#collapsed' => TRUE,
-      '#tree' => FALSE,
-    );
+  $element = $base + array(
+    '#type' => 'fieldset',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
 
-    // Enable/disable Google AdWords for this content type.
-    $form['google_adwords']['google_adwords_activation'] = array(
-      '#type' => 'radios',
-      '#title' => t('Google AdWords parameters'),
-      '#description' => t('Provide Google AdWords for nodes of this content type.'),
-      '#default_value' => variable_get('google_adwords_activation_'. $form['#node_type']->type, 0), // default to 'Disabled'
-      '#options' => array(t('Disabled'), t('Enabled')),
+  foreach ($fields as $field_name => $options) {
+    $element[$field_name] = $options + array(
+      '#type' => 'textfield',
+      '#default_value' => isset($items[$delta][$field_name]) ? $items[$delta][$field_name] : NULL,
+      '#size' => 60,
     );
   }
 
-  // Extend node creation and edit form with Google AdWords parameters.
-  if (isset($form['type']) && isset($form['#node'])) {
-    $node = $form['#node'];
-    if ($form['type']['#value'] .'_node_form' == $form_id && variable_get('google_adwords_activation_'. $node->type, FALSE)) {
-      // Google AdWords fieldset
-      $form['google_adwords'] = array(
-        '#type' => 'fieldset',
-        '#access' => user_access(GOOGLE_ADWORDS_EDIT_PERM),
-        '#title' => t('Google AdWords'),
-        '#collapsible' => TRUE,
-        '#collapsed' => empty($node->google_adwords),
-        '#prefix' => '<div class="google-adwords-params">',
-        '#suffix' => '</div>',
-        '#weight' => 30,
-        '#tree' => TRUE,
-      );
-
-      // Parameters
-      $form['google_adwords']['enabled'] = array(
-	      '#type' => 'radios',
-	      '#title' => t('Enable Google AdWords on this node'),
-	      '#default_value' => isset($node->google_adwords['enabled']) ? $node->google_adwords['enabled'] : 0,
-	      '#options' => array(0 => t('No'), 1 => t('Yes')),
-      );
-			$form['google_adwords']['label'] = array(
-        '#title' => t('Google Conversion Label'),
-        '#type' => 'textfield',
-        '#default_value' => isset($node->google_adwords['label']) ? $node->google_adwords['label'] : '',
-      );
-    }
-  }
+  return $element;
 }
 
 /**
- * Implementation of hook_nodeapi().
+ * Register a new conversion tracking.
+ *
+ * The rules integration calls this function.
+ * Use this to set a custom tracking not related to a entity.
+ *
+ * @param integer $conversion_id
+ * @param string $label
+ * @param string $value
+ * @param string $language
+ * @param integer $color
+ * @param integer $format
  */
-function google_adwords_nodeapi(&$node, $op, $teaser = NULL, $page = NULL) {
-		switch ($op) {
-			case 'load':
-			  $adwords = google_adwords_load_params($node);
-			  if (count($adwords) > 0) {
-			    $fields['google_adwords'] = $adwords;
-			    return $fields;
-			  }
-			  break;
-	
-			case 'insert':
-			case 'update':
-			  if (isset($node->google_adwords)) {
-			    google_adwords_save_adwords($node);
-			  }
-			  break;
-			
-			case 'delete':
-			  google_adwords_delete_adwords($node);
-			  break;
-			
-			case 'delete revision':
-			  google_adwords_delete_adwords_revision($node);
-			  break;
-		  case 'view':
-			  $node->content['google_adwords_code'] = array(
-				    '#value' => _google_adwords_view_adwords($node), 
-				    '#weight' => 50,
-				  );
-			  break;
-		}
+function google_adwords_add_tracking($conversion_id, $label = NULL, $value = NULL, $language = NULL, $color = NULL, $format = NULL) {
+  $cache = &drupal_static(__FUNCTION__, array());
+
+  $label = ($label) ? $label : base64_encode($conversion_id);
+  $language = ($language) ? $language : 'en';
+  $color = ($color) ? $color : 'FFFFFF';
+  $format = ($format) ? $format : 1;
+
+  $cache[$conversion_id] = array(
+    'conversion_id' => $conversion_id,
+    'label' => $label,
+    'language' => $language,
+    'color' => $color,
+    'format' => $format,
+  	'value' => $value,
+  );
 }
 
+/**
+ * Get defined conversion trackings for this page.
+ * Returns only the trackings set by rules or other modules using the function
+ * google_adwords_add_tracking().
+ *
+ * @see google_adwords_add_tracking()
+ *
+ * @return array
+ */
+function google_adwords_get_tracking() {
+  return drupal_static('google_adwords_add_tracking', array());
+}
 
 /**
- * Load Google AdWords parameters for a node.
+ * Implements hook_page_build().
+ * @param array $page
+ *
+ * @todo Do we need a setting to define in which area the code has to appear?
  */
-function google_adwords_load_params($node) {
-  if ($node->vid) {
-    $result = db_fetch_array(db_query('SELECT * FROM {google_adwords} WHERE vid = %d', $node->vid));
-    $adwords = array(
-			'enabled' => $result['enabled'], 
-			'label' => $result['label'],
-		);
-    return $adwords;
-  } 
-  else {
-    return array();
+function google_adwords_page_build(&$page) {
+  $trackings = google_adwords_get_tracking();
+  foreach($trackings as $tracking) {
+    $page['content']['system_main']['google_adwords'][$tracking['conversion_id']]['#markup'] = theme('google_adwords_tracking', $tracking);
   }
 }
 
 /**
- * Store Google AdWords parameters for a node in the custom module table.
+ * Creates the code snipped for the tracking.
+ * @param array $variables
+ * @return markup
  */
-function google_adwords_save_adwords($node) {
-  // Delete existing version
-  db_query('DELETE FROM {google_adwords} WHERE nid = %d AND vid = %d', $node->nid, $node->vid);
-  
-  db_query("INSERT INTO {google_adwords} (nid, vid, enabled, label) VALUES (%d, %d, %d, '%s')", 
-	    $node->nid, 
-	    $node->vid, 
-			$node->google_adwords['enabled'],
-			$node->google_adwords['label']
-    );
+function theme_google_adwords_tracking($variables){
 
-}
+  $value_js = NULL;
+  $value_param = NULL;
+  if (strlen($variables['value'])) {
+    $value_js = '  var google_conversion_value = "' . $variables['value'] . '";' . PHP_EOL;
+    $value_param = '&value=' . rawurlencode($variables['value']);
+  }
 
-/**
- * Delete Google AdWords parameters from a node.
- */
-function google_adwords_delete_adwords($node) {
-  // Delete all revisions associated with the node
-  db_query('DELETE FROM {google_adwords} WHERE nid = %d', $node->nid);
-}
-
-/**
- * Delete Google AdWords parameters from a node revision
- */
-function google_adwords_delete_adwords_revision($node) {
-  // delete the revision
-  db_query('DELETE FROM {google_adwords} WHERE nid = %d AND vid = %d', $node->nid, $node->vid);
-}
-
-
-function _google_adwords_view_adwords($node) {
-  global $user;
-  global $language;
-	
-	$track = 0;
-	if (is_array($user->roles)) {
-		foreach ($user->roles as $role) {
-			$role = str_replace(' ', '_', $role);
-			$track += variable_get("google_adwords_track_{$role}", FALSE);
-		}
-	}
-	
-	// Don't track page views in the admin sections, or for certain roles
-	if (arg(0) != 'admin' && $track > 0) {
-		if($node->google_adwords['enabled'] <> 0) {
-		  
-      $label = $node->google_adwords['label'];
-		  $id = variable_get('google_adwords_conversion_id', 0);
-		  $language = variable_get('google_adwords_conversion_language', $language->language);
-		  $format = variable_get('google_adwords_conversion_format', '2');
-		  $color = variable_get('google_adwords_conversion_color', 'FFFFFF');
-		  $google_js = variable_get('google_adwords_external_script', 'https://www.googleadservices.com/pagead/conversion.js');
-		  
-		  $output = '';
-		  
-		  $output .= "\n" . '<!-- Google Code for Conversion Page -->' . "\n";
-		  $output .= '<script language="JavaScript" type="text/javascript">' . "\n";
-		  $output .= '<!--' . "\n";
-		  $output .= '    var google_conversion_id = '. $id .';' . "\n";
-		  $output .= '    var google_conversion_language = "'. $language .'";' . "\n";
-		  $output .= '    var google_conversion_format = "'. $format .'";' . "\n";
-		  $output .= '    var google_conversion_color = "'. $color .'";' . "\n";
-		  $output .= '    var google_conversion_label = "'. $label .'";' . "\n";
-		  $output .= '//-->' . "\n";
-		  $output .= '</script>' . "\n";
-		  $output .= '<script language="JavaScript" src="' . $google_js . '"></script>' . "\n";
-		  $output .= '<noscript>' . "\n";
-		  $output .= '    <img height="1" width="1" border="0" src="https://www.googleadservices.com/pagead/conversion/' . $id . '/?label='. $label .'&amp;guid=ON&amp;script=0"/>' . "\n";
-		  $output .= '</noscript>' . "\n";
-		  		 
-		  return $output;
-		  
-	  }
-	}  
+  return 	'<!-- Google Code for Purchase Conversion Page -->' . PHP_EOL .
+          '<script language="JavaScript" type="text/javascript">' . PHP_EOL .
+          '<!--' . PHP_EOL .
+          '  var google_conversion_id = ' . $variables['conversion_id'] . ';' . PHP_EOL .
+          '  var google_conversion_language = "' . $variables['language'] . '";' . PHP_EOL .
+          '  var google_conversion_format = "' . $variables['format'] . '";' . PHP_EOL .
+          '  var google_conversion_color = "' . $variables['color'] . '";' . PHP_EOL .
+          '  var google_conversion_label = "' . $variables['label'] . '";' . PHP_EOL .
+          $value_js .
+          '//-->' . PHP_EOL .
+          '</script>' . PHP_EOL .
+          '<script language="JavaScript" src="https://www.googleadservices.com/pagead/conversion.js">' . PHP_EOL .
+          '</script>' . PHP_EOL .
+          '<noscript>' . PHP_EOL .
+          '  <img height=1 width=1 border=0 src="https://www.googleadservices.com/pagead/conversion/' . $variables['conversion_id'] . '/?script=0' . $value_param . '&label=' . $variables['label'] . '">' . PHP_EOL .
+          '</noscript>' . PHP_EOL;
 }

@@ -1,80 +1,45 @@
 <?php
-
+/**
+ * @file
+ * Installation stuff for google adwords module.
+ */
 
 /**
- * Implementation of hook_install().
+ * Implementation of hook_field_schema().
  */
-function google_adwords_install() {
-  // Create table
-  $created = drupal_install_schema('google_adwords');
-  
-  if ($created) {
-    drupal_set_message(t('Google AdWords module installed successfully. You must set <a href="/admin/user/permissions#module-google_adwords">permissions</a> and <a href="/admin/settings/google_adwords">configure</a> the module. '));
-  }
-  else {
-    drupal_set_message(t('Table installation for the Google AdWords module was unsuccessful. The tables may need to be installed by hand. See google_adwords.install file for a list of the installation queries.'), 'error');
-  }
-  return;
-}
-
-/**
- * Implementation of hook_uninstall().
- */
-function google_adwords_uninstall() {
-
-  // Remove variables
-  db_query('DELETE FROM {variable} WHERE name LIKE "google_adwords_%"');
-  
-  // Remove table
-  $deleted = drupal_uninstall_schema('google_adwords');
-  if ($deleted) {
-    drupal_set_message(t('Google AdWords module has been uninstalled successfully.'));
-  }
-  else {
-    drupal_set_message(t('Table removal for the Google AdWords module was unsuccessful. The tables may need to be uninstalled by hand. See google_adwords.install file for a list of the uninstall queries.'), 'error');
-  }
-  return;
-}
-
-
-/**
- * Implementation of hook_schema().
- */
-function google_adwords_schema() {
-  $schema['google_adwords'] = array(
-    'description' => t('Stores Google AdWords for nodes.'),
-    'primary key' => array('vid'),
-    'fields' => array(
-      'nid' => array(
+function google_adwords_field_schema($field) {
+  return array(
+    'columns' => array(
+      'conversion_id' => array(
         'type' => 'int',
-        'unsigned' => TRUE,
+        'length' => 11,
         'not null' => TRUE,
-        'default' => 0,
-        'description' => t('The {node}.nid to associated with the Google AdWords.'),
       ),
-	    'vid' => array(
-	      'type' => 'int',
-	      'unsigned' => TRUE,
-	      'not null' => TRUE,
-	      'default' => 0,
-	      'description' => t('Primary Key: The {node}.vid associated with the Google AdWords.'),
-	    ),
-      'enabled'=> array(
-	      'type' => 'int',
-	      'description' => t('Useful to turn on and off Google AdWords on a per node basis.'),
-	      'not null' => TRUE,
-	      'unsigned' => TRUE,
-	      'default' => 0,
-      ),
-			'label' => array(
+  		'label' => array(
         'type' => 'varchar',
-        'default' => '',
-        'length' => 255,       
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+  		'value' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+  		'format' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+  		'color' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+  		'language' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
       ),
     ),
   );
-
-  return $schema;
 }
-
-
