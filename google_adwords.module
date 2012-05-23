@@ -6,25 +6,40 @@
 
 // User permissions
 define('GOOGLE_ADWORDS_ADMIN_PERM', 'administer google adwords module');
-define('GOOGLE_ADWORDS_EDIT_PERM', 'edit google adwords parameters');
+define('GOOGLE_ADWORDS_TRACK_PERM', 'track role with google adword');
 
 /**
  * Implementation of hook_permission().
  *
- * @todo Where do we need an permission check? Rules?
  */
-function google_adwords_perm() {
-  return array(GOOGLE_ADWORDS_ADMIN_PERM,
+function google_adwords_permission() {
+  return array(
     GOOGLE_ADWORDS_ADMIN_PERM => array(
       'title' => t('Administer google adwords module.'),
       'description' => t('Perform administration tasks for google adwords.'),
     ),
-    GOOGLE_ADWORDS_EDIT_PERM => array(
-      'title' => t('Edit google adwords parameters.'),
-      'description' => t('Edit google adwords parameters.'),
+    GOOGLE_ADWORDS_TRACK_PERM => array(
+      'title' => t('Track role with google adwords.'),
+      'description' => t('Selected roles will have the google adwords code displayed if available.'),
     ),
   );
 }
+
+/**
+ * Implements hook_menu().
+ */
+function google_adwords_menu() {  
+  $items['admin/config/system/google_adwords'] = array(
+    'title' => t('Google AdWords'),
+    'description' => t('Google AdWords Settings page.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('google_adwords_admin_settings'),
+    'access arguments' => array(GOOGLE_ADWORDS_ADMIN_PERM),
+    'file' => 'google_adwords.admin.inc',
+  );
+  return $items;
+}
+
 
 /**
  * Implements hook_theme().
@@ -93,13 +108,26 @@ function google_adwords_field_formatter_info() {
  * Implements hook_field_formatter_view().
  */
 function google_adwords_field_formatter_view($object_type, $object, $field, $instance, $langcode, $items, $display) {
-  $element = array();
+  global $user;
 
-  foreach ($items as $delta => $item) {
-    switch ($display['type']) {
-      case 'google_adwords_default':
-        $element[$delta]['#markup'] = theme('google_adwords_tracking', $item);
-        break;
+  $element = array();
+  // Get available permissions
+  $permission = user_roles(FALSE, GOOGLE_ADWORDS_TRACK_PERM);
+  $track = FALSE;
+  // Make sure the user is being tracked
+  foreach ($user->roles as $rid) {
+    if (in_array($rid, $permission)) {
+      $track = TRUE;
+    }  
+  }
+  
+  if ($track) {
+    foreach ($items as $delta => $item) {
+      switch ($display['type']) {
+        case 'google_adwords_default':
+          $element[$delta]['#markup'] = theme('google_adwords_tracking', $item);
+          break;
+      }
     }
   }
   return $element;
@@ -140,12 +168,20 @@ function google_adwords_field_presave($entity_type, $entity, $field, $instance, 
  */
 function google_adwords_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $base) {
   $fields = array(
-    'conversion_id' => array('#title' => 'Conversion Id'),
+    'conversion_id' => array(
+      '#title' => 'Conversion Id'
+    ),
     'label' => array('#title' => 'Label'),
     'value' => array('#title' => 'Value'),
     'language' => array('#title' => 'Language'),
-    'color' => array('#title' => 'Color'),
-    'format' => array('#title' => 'Format'),
+    'color' => array(
+      '#title' => 'Color',
+      '#description' => t('<i><b>Note:</b> Enter the HEX value for the color without the hash (#) symbol.</i>'),
+      ),
+    'format' => array(
+      '#title' => 'Format',
+      '#description' => t('<i><b>Usage:</b> 1 = Single line, 2 = Two lines, 3 = Not displayed</i>'),
+    ),
   );
 
   $element = $base + array(
