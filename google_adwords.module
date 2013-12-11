@@ -1,291 +1,169 @@
 <?php
-/**
- * @file
- * Google Adwords Conversion Tracking Module
- */
-
-// User permissions
-define('GOOGLE_ADWORDS_ADMIN_PERM', 'administer google adwords module');
-define('GOOGLE_ADWORDS_TRACK_PERM', 'track role with google adword');
-
-/**
- * Implementation of hook_permission().
- *
- */
-function google_adwords_permission() {
-  return array(
-    GOOGLE_ADWORDS_ADMIN_PERM => array(
-      'title' => t('Administer google adwords module.'),
-      'description' => t('Perform administration tasks for google adwords.'),
-    ),
-    GOOGLE_ADWORDS_TRACK_PERM => array(
-      'title' => t('Track role with google adwords.'),
-      'description' => t('Selected roles will have the google adwords code displayed if available.'),
-    ),
-  );
-}
-
-/**
- * Implements hook_menu().
- */
-function google_adwords_menu() {  
-  $items['admin/config/system/google_adwords'] = array(
-    'title' => t('Google AdWords'),
-    'description' => t('Google AdWords Settings page.'),
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('google_adwords_admin_settings'),
-    'access arguments' => array(GOOGLE_ADWORDS_ADMIN_PERM),
-    'file' => 'google_adwords.admin.inc',
-  );
-  return $items;
-}
-
-
-/**
- * Implements hook_theme().
- */
-function google_adwords_theme() {
-  return array(
-    'google_adwords_tracking' => array(
-      'variables' => array(),
-    ),
-  );
-}
 
 /**
  * Implements hook_field_info().
+ *
+ * Provides the description of the field.
  */
 function google_adwords_field_info() {
   return array(
-    'google_adwords_tracking' => array(
-      'label' => 'Google Adwords Field',
-      'description' => t('This field stores Google Adwords conversion tracking parameter.'),
-      'default_widget' => 'text_textfield',
-      'default_formatter' => 'default',
-      'property_type' => 'text',
+    // We name our field as the associative name of the array.
+    'google_adwords_label' => array(
+      'label' => t('Google Adwords'),
+      'description' => t('Add the Google Adwords Conversion label for this node.'),
+      'default_widget' => 'google_adwords_text',
+      'default_formatter' => 'google_adwords_default',
     ),
   );
-}
-
-/**
- * Implements hook_field_validate().
- */
-function google_adwords_field_validate($obj_type, $object, $field, $instance, $langcode, $items, &$errors) {
-  foreach ($items as $delta => $item) {
-    if (!empty($item['conversion_id']) && (!is_numeric($item['conversion_id']) || (int) $item['conversion_id'] != $item['conversion_id'])) {
-      $error = t('%name: The ID value has to be numeric.', array('%name' => $instance['label']));
-      $errors[$field['field_name']][$langcode][$delta][] = array(
-        'error' => $error,
-        'message' => $error,
-      );
-    }
-  }
-  return;
 }
 
 /**
  * Implements hook_field_is_empty().
+ *
+ * hook_field_is_emtpy() is where Drupal asks us if this field is empty.
+ * Return TRUE if it does not contain data, FALSE if it does. This lets
+ * the form API flag an error when required fields are empty.
  */
 function google_adwords_field_is_empty($item, $field) {
-  // It makes no sense to store stuff without a conversion id.
-  return empty($item['conversion_id']);
+  return empty($item['label']);
 }
 
 /**
  * Implements hook_field_formatter_info().
+ *
+ * @see google_adwords_field_formatter_view()
  */
 function google_adwords_field_formatter_info() {
-  $formats = array(
+  return array(
     'google_adwords_default' => array(
       'label' => t('Default'),
-      'field types' => array('google_adwords_tracking'),
+      'field types' => array('google_adwords_label'),
     ),
   );
-  return $formats;
 }
 
 /**
  * Implements hook_field_formatter_view().
+ *
+ * @see google_adwords_field_formatter_info()
  */
-function google_adwords_field_formatter_view($object_type, $object, $field, $instance, $langcode, $items, $display) {
-  global $user;
+function google_adwords_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+	global $user;
+ $element = array();
+ 
+	$trackable = 0; 
+	if (is_array($user->roles)) {
+		foreach ($user->roles as $role) {
+			$role = str_replace(' ', '_', $role);
+			$trackable += variable_get("google_adwords_track_{$role}", FALSE);
+		}
+	}
 
-  $element = array();
-  // Get available permissions
-  $permission = user_roles(FALSE, GOOGLE_ADWORDS_TRACK_PERM);
-  $track = FALSE;
-  // Make sure the user is being tracked
-  foreach ($user->roles as $rid) {
-    if (in_array($rid, $permission)) {
-      $track = TRUE;
-    }  
-  }
-  
-  if ($track) {
-    foreach ($items as $delta => $item) {
-      switch ($display['type']) {
-        case 'google_adwords_default':
-          $element[$delta]['#markup'] = theme('google_adwords_tracking', $item);
-          break;
-      }
-    }
-  }
-  return $element;
+	if ($trackable > 0) {
+	 switch ($display['type']) {
+	   case 'google_adwords_default':
+	     foreach ($items as $delta => $item) {
+	       $element[$delta] = array(
+		       '#markup' => theme('google_adwords', array('label' => $item['label'])),
+		       '#attached' => array(
+          'css' => array(drupal_get_path('module', 'google_adwords') . '/google_adwords.css'),
+	        ),
+        );
+	     }
+	     break;
+	 }
+ }
+
+ return $element;
 }
 
 /**
  * Implements hook_field_widget_info().
+ *
+ * These widget types will eventually show up in hook_field_widget_form,
+ * where we will have to flesh them out.
+ *
+ * @see google_adwords_field_widget_form()
  */
 function google_adwords_field_widget_info() {
   return array(
-    'google_adwords_tracking' => array(
-      'label' => t('Google Adwords Tracking Field'),
-      'field types' => array('google_adwords_tracking'),
+    'google_adwords_text' => array(
+      'label' => t('Text Field'),
+      'field types' => array('google_adwords_label'),
     ),
   );
-}
-
-/**
- * Implements hook_field_presave().
- */
-function google_adwords_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
-  // Make sure nothing evil can bypass
-  foreach ($items as $delta => &$item) {
-    $item['conversion_id'] = (int) $item['conversion_id'];
-    $item['label'] = filter_xss($item['label']);
-    $item['value'] = filter_xss($item['value']);
-    $item['language'] = filter_xss($item['language']);
-    $item['color'] = filter_xss($item['color']);
-    $item['format'] = filter_xss($item['format']);
-  }
-  return $items;
 }
 
 /**
  * Implements hook_field_widget_form().
  *
- * @todo Create a nicer form element.
+ * hook_widget_form() is where Drupal tells us to create form elements for
+ * our field's widget.
+ *
  */
-function google_adwords_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $base) {
-  $fields = array(
-    'conversion_id' => array(
-      '#title' => 'Conversion Id'
-    ),
-    'label' => array('#title' => 'Label'),
-    'value' => array('#title' => 'Value'),
-    'language' => array('#title' => 'Language'),
-    'color' => array(
-      '#title' => 'Color',
-      '#description' => t('<i><b>Note:</b> Enter the HEX value for the color without the hash (#) symbol.</i>'),
-      ),
-    'format' => array(
-      '#title' => 'Format',
-      '#description' => t('<i><b>Usage:</b> 1 = Single line, 2 = Two lines, 3 = Not displayed</i>'),
-    ),
-  );
+function google_adwords_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  $widget = array();
 
-  $element = $base + array(
-    '#type' => 'fieldset',
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
-  );
-
-  foreach ($fields as $field_name => $options) {
-    $element[$field_name] = $options + array(
-      '#type' => 'textfield',
-      '#default_value' => isset($items[$delta][$field_name]) ? $items[$delta][$field_name] : NULL,
-      '#size' => 60,
-    );
+  switch ($instance['widget']['type']) {
+    case 'google_adwords_text':
+      $widget = $element + array(
+        '#type' => 'textfield',
+        '#default_value' => isset($items[$delta]['label']) ? $items[$delta]['label'] : '',
+      );
+      break;
   }
 
+  $element['label'] = $widget;
   return $element;
+  
 }
 
-/**
- * Register a new conversion tracking.
- *
- * The rules integration calls this function.
- * Use this to set a custom tracking not related to a entity.
- *
- * @param integer $conversion_id
- * @param string $label
- * @param string $value
- * @param string $language
- * @param integer $color
- * @param integer $format
- */
-function google_adwords_add_tracking($conversion_id, $label = NULL, $value = NULL, $language = NULL, $color = NULL, $format = NULL) {
-  $cache = &drupal_static(__FUNCTION__, array());
 
-  $label = ($label) ? $label : base64_encode($conversion_id);
-  $language = ($language) ? $language : 'en';
-  $color = ($color) ? $color : 'FFFFFF';
-  $format = ($format) ? $format : 1;
-
-  $cache[$conversion_id] = array(
-    'conversion_id' => $conversion_id,
-    'label' => $label,
-    'language' => $language,
-    'color' => $color,
-    'format' => $format,
-  	'value' => $value,
+function google_adwords_theme() {
+  return array(
+    'google_adwords' => array(
+      'variables' => array('label' => NULL),
+      'template' => 'google_adwords',
+    ),
   );
 }
 
-/**
- * Get defined conversion trackings for this page.
- * Returns only the trackings set by rules or other modules using the function
- * google_adwords_add_tracking().
- *
- * @see google_adwords_add_tracking()
- *
- * @return array
- */
-function google_adwords_get_tracking() {
-  return drupal_static('google_adwords_add_tracking', array());
+function template_preprocess_google_adwords(&$variables) {
+	global $language;
+	
+ $variables['id'] = variable_get('google_adwords_conversion_id', 0);
+ $variables['language'] = variable_get('google_adwords_conversion_language', $language->language);
+ $variables['format'] = variable_get('google_adwords_conversion_format', '2');
+ $variables['color'] = variable_get('google_adwords_conversion_color', 'FFFFFF');
+ $variables['google_js'] = variable_get('google_adwords_external_script', 'https://www.googleadservices.com/pagead/conversion.js');
+
 }
 
-/**
- * Implements hook_page_build().
- * @param array $page
- *
- * @todo Do we need a setting to define in which area the code has to appear?
- */
-function google_adwords_page_build(&$page) {
-  $trackings = google_adwords_get_tracking();
-  foreach($trackings as $tracking) {
-    $page['content']['system_main']['google_adwords'][$tracking['conversion_id']]['#markup'] = theme('google_adwords_tracking', $tracking);
-  }
-}
 
 /**
- * Creates the code snipped for the tracking.
- * @param array $variables
- * @return markup
+ * Implementation of hook_permission().
  */
-function theme_google_adwords_tracking($variables){
-
-  $value_js = NULL;
-  $value_param = NULL;
-  if (strlen($variables['value'])) {
-    $value_js = '  var google_conversion_value = "' . $variables['value'] . '";' . PHP_EOL;
-    $value_param = '&value=' . rawurlencode($variables['value']);
-  }
-
-  return 	'<!-- Google Code for Purchase Conversion Page -->' . PHP_EOL .
-          '<script language="JavaScript" type="text/javascript">' . PHP_EOL .
-          '<!--' . PHP_EOL .
-          '  var google_conversion_id = ' . $variables['conversion_id'] . ';' . PHP_EOL .
-          '  var google_conversion_language = "' . $variables['language'] . '";' . PHP_EOL .
-          '  var google_conversion_format = "' . $variables['format'] . '";' . PHP_EOL .
-          '  var google_conversion_color = "' . $variables['color'] . '";' . PHP_EOL .
-          '  var google_conversion_label = "' . $variables['label'] . '";' . PHP_EOL .
-          $value_js .
-          '//-->' . PHP_EOL .
-          '</script>' . PHP_EOL .
-          '<script language="JavaScript" src="https://www.googleadservices.com/pagead/conversion.js">' . PHP_EOL .
-          '</script>' . PHP_EOL .
-          '<noscript>' . PHP_EOL .
-          '  <img height=1 width=1 border=0 src="https://www.googleadservices.com/pagead/conversion/' . $variables['conversion_id'] . '/?script=0' . $value_param . '&label=' . $variables['label'] . '">' . PHP_EOL .
-          '</noscript>' . PHP_EOL;
+function google_adwords_permission() {
+  return array(
+    'administer google adwords module' => array(
+      'title' => t('Administer Google Adwords Module'),
+    ),
+    'edit google adwords parameters' => array(
+      'title' => t('Edit Google Adwords Parameters'),
+    ),
+  );
 }
+
+function google_adwords_menu(){
+	$items = array();
+  $items['admin/config/system/google_adwords'] = array(
+	  'title' => t('Google AdWords'),
+	  'description' => t('Google AdWords Settings page.'),
+	  'page callback' => 'drupal_get_form',
+	  'page arguments' => array('google_adwords_admin_settings'),
+	  'access arguments' => array('administer google adwords module'),
+	  'file' => 'google_adwords.admin.inc',
+  );
+  return $items;
+}
+

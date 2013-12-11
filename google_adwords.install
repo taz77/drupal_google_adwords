@@ -1,45 +1,31 @@
 <?php
-/**
- * @file
- * Installation stuff for google adwords module.
- */
 
 /**
- * Implementation of hook_field_schema().
+ * Implementation of hook_uninstall().
  */
-function google_adwords_field_schema($field) {
-  return array(
-    'columns' => array(
-      'conversion_id' => array(
-        'type' => 'int',
-        'length' => 11,
-        'not null' => TRUE,
-      ),
-  		'label' => array(
-        'type' => 'varchar',
-        'length' => 255,
-        'not null' => TRUE,
-      ),
-  		'value' => array(
-        'type' => 'varchar',
-        'length' => 255,
-        'not null' => FALSE,
-      ),
-  		'format' => array(
-        'type' => 'varchar',
-        'length' => 255,
-        'not null' => FALSE,
-      ),
-  		'color' => array(
-        'type' => 'varchar',
-        'length' => 255,
-        'not null' => FALSE,
-      ),
-  		'language' => array(
-        'type' => 'varchar',
-        'length' => 255,
-        'not null' => FALSE,
-      ),
-    ),
-  );
+function google_adwords_uninstall() {
+	// Remove variables	
+	db_delete('variable')
+  ->condition('name', 'google_adwords%', 'LIKE')
+  ->execute(); 
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function google_adwords_field_schema() {
+	$columns = array(
+		'label' => array(
+	  'type' => 'varchar',
+	  'default' => '',
+	  'length' => 255,       
+	 ),
+	);
+	$indexes = array(
+	 'label' => array('label'),
+	);
+	return array(
+  'columns' => $columns,
+		'indexes' => $indexes,
+	);
 }

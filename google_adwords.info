@@ -1,6 +1,8 @@
 name = Google AdWords Conversion
-description = Adds Google AdWords Conversion Tracking fields and rules.
+description = Adds Google AdWords Conversion Tracking javascript code to specific nodes.
 core = 7.x
 package = Statistics
 
-recommended = rules
+configure = admin/config/system/google_adwords
+
+files[] = google_adwords.install
