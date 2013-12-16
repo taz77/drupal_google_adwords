@@ -1,31 +1,36 @@
 <?php
 
 /**
+ * @file
+ * Install, update, and uninstall functions for the Google Adwords module.
+ */
+
+/**
  * Implementation of hook_uninstall().
  */
 function google_adwords_uninstall() {
-	// Remove variables	
-	db_delete('variable')
-  ->condition('name', 'google_adwords%', 'LIKE')
-  ->execute(); 
+  // Remove variables
+  db_delete('variable')
+    ->condition('name', 'google_adwords%', 'LIKE')
+    ->execute();
 }
 
 /**
  * Implementation of hook_schema().
  */
 function google_adwords_field_schema() {
-	$columns = array(
-		'label' => array(
-	  'type' => 'varchar',
-	  'default' => '',
-	  'length' => 255,       
-	 ),
-	);
-	$indexes = array(
-	 'label' => array('label'),
-	);
-	return array(
-  'columns' => $columns,
-		'indexes' => $indexes,
-	);
+  $columns = array(
+    'label' => array(
+      'type' => 'varchar',
+      'default' => '',
+      'length' => 255,
+    ),
+  );
+  $indexes = array(
+    'label' => array('label'),
+  );
+  return array(
+    'columns' => $columns,
+    'indexes' => $indexes,
+  );
 }
