@@ -23,7 +23,7 @@ function google_adwords_admin_settings($form_state) {
     '#size' => 15,
     '#maxlength' => 255,
     '#required' => TRUE,
-    '#description' => t(''),
+    '#description' => '',
   );
   $form['conversion']['google_adwords_conversion_language'] = array(
     '#type' => 'textfield',
@@ -32,7 +32,7 @@ function google_adwords_admin_settings($form_state) {
     '#size' => 15,
     '#maxlength' => 255,
     '#required' => TRUE,
-    '#description' => t(''),
+    '#description' => '',
   );
   $form['conversion']['google_adwords_conversion_format'] = array(
     '#type' => 'textfield',
@@ -41,7 +41,7 @@ function google_adwords_admin_settings($form_state) {
     '#size' => 15,
     '#maxlength' => 255,
     '#required' => TRUE,
-    '#description' => t(''),
+    '#description' => '',
   );
   $form['conversion']['google_adwords_conversion_color'] = array(
     '#type' => 'textfield',
@@ -50,7 +50,7 @@ function google_adwords_admin_settings($form_state) {
     '#size' => 15,
     '#maxlength' => 255,
     '#required' => TRUE,
-    '#description' => t(''),
+    '#description' => '',
   );
   $form['conversion']['google_adwords_external_script'] = array(
     '#type' => 'textfield',
@@ -59,7 +59,7 @@ function google_adwords_admin_settings($form_state) {
     '#size' => 80,
     '#maxlength' => 255,
     '#required' => TRUE,
-    '#description' => t(''),
+    '#description' => '',
   );
   // Render the role overview.
   $result = db_query('SELECT * FROM {role} ORDER BY name');
