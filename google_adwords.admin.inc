@@ -68,11 +68,11 @@ function google_adwords_admin_settings($form_state) {
     '#type' => 'fieldset',
     '#title' => t('User Role Tracking'),
     '#collapsible' => TRUE,
-    '#description' => t('Define what user roles should be tracked.')
+    '#description' => t('Define what user roles should be tracked.'),
   );
 
   foreach ($result as $role) {
-    // can't use empty spaces in varname
+    // Can't use empty spaces in varname.
     $role_varname = $string = str_replace(' ', '_', $role->name);
     $form['conversion']['roles']["google_adwords_track_{$role_varname}"] = array(
       '#type' => 'checkbox',
