@@ -1,16 +1,21 @@
 <?php
 
 /**
- * Implementation of hook_admin_settings() for configuring the module
+ * @file
+ * Admin page for Google Adwords.
+ */
+
+/**
+ * Admin settings page handler callback function.
  */
 function google_adwords_admin_settings($form_state) {
-	
+
   $form['conversion'] = array(
     '#type' => 'fieldset',
     '#title' => t('General Conversion settings'),
     '#collapsible' => FALSE,
   );
-  
+
   $form['conversion']['google_adwords_conversion_id'] = array(
     '#type' => 'textfield',
     '#title' => t('Conversion ID'),
@@ -56,17 +61,17 @@ function google_adwords_admin_settings($form_state) {
     '#required' => TRUE,
     '#description' => t(''),
   );
-      // Render the role overview.
+  // Render the role overview.
   $result = db_query('SELECT * FROM {role} ORDER BY name');
 
   $form['conversion']['roles'] = array(
-        '#type' => 'fieldset',
-        '#title' => t('User Role Tracking'),
-        '#collapsible' => TRUE,
-        '#description' => t('Define what user roles should be tracked.')
+    '#type' => 'fieldset',
+    '#title' => t('User Role Tracking'),
+    '#collapsible' => TRUE,
+    '#description' => t('Define what user roles should be tracked.')
   );
 
-		foreach ($result as $role) {
+  foreach ($result as $role) {
     // can't use empty spaces in varname
     $role_varname = $string = str_replace(' ', '_', $role->name);
     $form['conversion']['roles']["google_adwords_track_{$role_varname}"] = array(
@@ -77,5 +82,4 @@ function google_adwords_admin_settings($form_state) {
   }
 
   return system_settings_form($form);
-  
 }
