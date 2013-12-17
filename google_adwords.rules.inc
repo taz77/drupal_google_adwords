@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Rules integration for google adwords conversion tracking
@@ -18,36 +19,36 @@ function google_adwords_rules_action_info() {
       'conversion_id' => array(
         'type' => 'integer',
         'label' => t('Conversion ID'),
-  			'optional' => FALSE,
+        'optional' => FALSE,
       ),
-  		'label' => array(
+      'label' => array(
         'type' => 'text',
         'label' => t('Label'),
-  			'optional' => FALSE,
+        'optional' => FALSE,
       ),
-  		'value' => array(
+      'value' => array(
         'type' => 'text',
         'label' => t('Conversion Value'),
-  			'optional' => TRUE,
-  			'default value' => 0,
+        'optional' => TRUE,
+        'default value' => 0,
       ),
-  		'language' => array(
+      'language' => array(
         'type' => 'text',
         'label' => t('Language'),
-  			'optional' => TRUE,
-  			'default value' => 'en',
+        'optional' => TRUE,
+        'default value' => 'en',
       ),
-  		'color' => array(
+      'color' => array(
         'type' => 'text',
         'label' => t('Color'),
-  			'optional' => TRUE,
-  			'default value' => 'FFFFFF',
+        'optional' => TRUE,
+        'default value' => 'FFFFFF',
       ),
-  		'format' => array(
+      'format' => array(
         'type' => 'text',
         'label' => t('Format'),
-  			'optional' => TRUE,
-  			'default value' => '1',
+        'optional' => TRUE,
+        'default value' => '1',
       ),
     ),
     'group' => t('Google Adwords'),
