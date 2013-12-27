@@ -125,7 +125,14 @@ function google_adwords_field_widget_form(&$form, &$form_state, $field, $instanc
 function google_adwords_theme() {
   return array(
     'google_adwords' => array(
-      'variables' => array('label' => NULL),
+      'variables' => array(
+        'conversion_id' => NULL,
+        'language' => NULL,
+        'format' => NULL,
+        'color' => NULL,
+        'label' => NULL,
+        'value' => NULL,
+      ),
       'template' => 'google_adwords',
     ),
   );
