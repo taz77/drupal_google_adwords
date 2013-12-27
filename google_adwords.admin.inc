@@ -77,7 +77,7 @@ function google_adwords_admin_settings($form_state) {
     $form['conversion']['roles']["google_adwords_track_{$role_varname}"] = array(
       '#type' => 'checkbox',
       '#title' => t($role->name),
-      '#default_value' => variable_get("google_adwords_track_{$role_varname}", FALSE),
+      '#default_value' => variable_get('google_adwords_track_{' . $role_varname . '}', FALSE),
     );
   }
 
