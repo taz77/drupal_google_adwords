@@ -73,7 +73,7 @@ function google_adwords_admin_settings($form_state) {
 
   foreach ($result as $role) {
     // Can't use empty spaces in varname.
-    $role_varname = $string = str_replace(' ', '_', $role->name);
+    $role_varname = str_replace(' ', '_', $role->name);
     $form['conversion']['roles']['google_adwords_track_' . $role_varname] = array(
       '#type' => 'checkbox',
       '#title' => t($role->name),
