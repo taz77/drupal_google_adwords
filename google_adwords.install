@@ -20,7 +20,7 @@ function google_adwords_install() {
 }
 
 /**
- * Implementation of hook_uninstall().
+ * Implements hook_uninstall().
  */
 function google_adwords_uninstall() {
   // Remove variables.
@@ -30,7 +30,7 @@ function google_adwords_uninstall() {
 }
 
 /**
- * Implementation of hook_field_schema().
+ * Implements hook_field_schema().
  */
 function google_adwords_field_schema($field) {
   return array(
