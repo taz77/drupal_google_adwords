@@ -10,7 +10,8 @@
  */
 function google_adwords_install() {
   // @TODO  These needs rewritten using l().
-  drupal_set_message(t(
+  $t = get_t();
+  drupal_set_message($t(
       'Google AdWords module installed successfully. You must <a href="@fields">configure a Google Adwords Tracking field</a>. You can set <a href="@permissions">permissions</a> and <a href="@configuration">configure</a> the module.', array(
     '@permissions' => url('admin/people/permissions', array('fragment' => 'module-google_adwords')),
     '@configuration' => url('admin/config/system/google_adwords'),
