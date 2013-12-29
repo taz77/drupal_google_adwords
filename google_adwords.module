@@ -106,7 +106,6 @@ function google_adwords_field_widget_info() {
  *
  * hook_widget_form() is where Drupal tells us to create form elements for
  * our field's widget.
- *
  */
 function google_adwords_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
   global $language;
@@ -151,7 +150,6 @@ function google_adwords_field_widget_form(&$form, &$form_state, $field, $instanc
 
 /**
  * Implements hook_theme().
- * @return type
  */
 function google_adwords_theme() {
   return array(
@@ -170,15 +168,14 @@ function google_adwords_theme() {
 
 /**
  * Implements template_preprocess_HOOK().
- * Loads the proper AdWords external JavaScript file
- * @param $variables The template variables
+ * Loads the proper AdWords external JavaScript file.
  */
 function template_preprocess_google_adwords(&$variables) {
   $variables['google_js'] = variable_get('google_adwords_external_script', 'https://www.googleadservices.com/pagead/conversion.js');
 }
 
 /**
- * Implementation of hook_permission().
+ * Implements hook_permission().
  */
 function google_adwords_permission() {
   return array(
@@ -197,8 +194,8 @@ function google_adwords_permission() {
 function google_adwords_menu() {
   $items = array();
   $items['admin/config/system/google_adwords'] = array(
-    'title' => t('Google AdWords'),
-    'description' => t('Google AdWords Settings page.'),
+    'title' => 'Google AdWords',
+    'description' => 'Google AdWords Settings page.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('google_adwords_admin_settings'),
     'access arguments' => array('administer google adwords module'),
@@ -212,14 +209,8 @@ function google_adwords_menu() {
  *
  * The rules integration calls this function.
  * Use this to set a custom tracking not related to a entity.
- *
- * @param integer $conversion_id
- * @param string $label
- * @param string $value
- * @param string $language
- * @param integer $color
- * @param integer $format
  */
+
 function google_adwords_add_tracking($conversion_id, $label = NULL, $value = NULL, $language = NULL, $color = NULL, $format = NULL) {
   $cache = &drupal_static(__FUNCTION__, array());
 
@@ -234,6 +225,6 @@ function google_adwords_add_tracking($conversion_id, $label = NULL, $value = NUL
     'language' => $language,
     'color' => $color,
     'format' => $format,
-  	'value' => $value,
+    'value' => $value,
   );
 }
