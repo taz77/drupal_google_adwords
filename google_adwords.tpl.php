@@ -1,3 +1,9 @@
+<?php
+/**
+ * @file
+ * Google AdWord template for page JS.
+ */
+?>
 <!-- Google Code for Conversion Page //-->
 <script language="JavaScript" type="text/javascript">
   /* <![CDATA[ */
