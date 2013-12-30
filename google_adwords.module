@@ -119,7 +119,7 @@ function google_adwords_field_widget_form(&$form, &$form_state, $field, $instanc
     $element['conversion_id'] = array(
       '#type' => 'textfield',
       '#title' => 'Conversion ID',
-      '#default_value' => isset($items[$delta]['conversion_id']) ? $items[$delta]['conversion_id'] : '',
+      '#default_value' => isset($items[$delta]['conversion_id']) ? $items[$delta]['conversion_id'] : variable_get('google_adwords_conversion_id', ''),
     );
     $element['conversion_language'] = array(
       '#type' => 'textfield',
@@ -210,7 +210,6 @@ function google_adwords_menu() {
  * The rules integration calls this function.
  * Use this to set a custom tracking not related to a entity.
  */
-
 function google_adwords_add_tracking($conversion_id, $label = NULL, $value = NULL, $language = NULL, $color = NULL, $format = NULL) {
   $cache = &drupal_static(__FUNCTION__, array());
 

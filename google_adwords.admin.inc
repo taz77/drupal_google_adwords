@@ -12,7 +12,7 @@ function google_adwords_admin_settings($form_state) {
 
   $form['conversion'] = array(
     '#type' => 'fieldset',
-    '#title' => t('General Conversion settings'),
+    '#title' => t('Default Conversion settings'),
     '#collapsible' => FALSE,
   );
 
@@ -22,7 +22,7 @@ function google_adwords_admin_settings($form_state) {
     '#default_value' => variable_get('google_adwords_conversion_id', ''),
     '#size' => 15,
     '#maxlength' => 255,
-    '#required' => TRUE,
+    '#required' => FALSE,
     '#description' => '',
   );
   $form['conversion']['google_adwords_conversion_language'] = array(
