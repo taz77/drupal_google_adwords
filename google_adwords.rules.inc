@@ -55,3 +55,4 @@ function google_adwords_rules_action_info() {
   );
   return $actions;
 }
+
