@@ -97,3 +97,4 @@ function google_adwords_signup_preprocess_page($variables) {
     drupal_add_js(variable_get('google_adwords_external_script', 'https://www.googleadservices.com/pagead/conversion.js'), array('type' => 'external', 'scope' => 'footer', 'weight' => 6));
   }
 }
+

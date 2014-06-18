@@ -6,3 +6,4 @@ package = Statistics
 dependencies = google_adwords
 
 configure = admin/config/system/google_adwords
+
