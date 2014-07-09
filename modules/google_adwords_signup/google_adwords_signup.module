@@ -58,7 +58,6 @@ function google_adwords_signup_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'user_register_form') {
     // Need to add the ability to shut this off with an admin setting.
     $form['#submit'][] = 'google_adwords_signup_conversion';
-    kpr($form);
   }
 }
 
