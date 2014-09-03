@@ -105,8 +105,8 @@ function google_adwords_path_code_form($form, $form_state, $cid = NULL) {
     '#type' => 'textarea',
     '#title' => t('Paths'),
     '#default_value' => isset($code) ? $code['paths'] : '',
-    '#size' => 15,
-    '#maxlength' => 64,
+    '#rows' => 8,
+    '#cols' => 128,
     '#required' => TRUE,
     '#description' => t('A list of paths, separated by a new line, where this conversion code should be inserted.'),
   );
