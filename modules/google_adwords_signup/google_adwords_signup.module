@@ -9,7 +9,7 @@
  * Implements hook_form_alter().
  */
 function google_adwords_signup_form_alter(&$form, &$form_state, $form_id) {
-  //Add to Google AdWords form so we can track user registration.
+  // Add to Google AdWords form so we can track user registration.
   if ($form_id == 'google_adwords_admin_settings') {
     $form['user_conversion'] = array(
       '#type' => 'fieldset',
@@ -93,6 +93,11 @@ function google_adwords_signup_preprocess_page($variables) {
         var google_conversion_label = "' . $conversion_values['conversion_label'] . '";
      \/* ]]> *\/', array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
 
-    drupal_add_js(variable_get('google_adwords_external_script', 'https://www.googleadservices.com/pagead/conversion.js'), array('type' => 'external', 'scope' => 'footer', 'weight' => 6));
+    drupal_add_js(variable_get('google_adwords_external_script', 'https://www.googleadservices.com/pagead/conversion.js'), array(
+      'type' => 'external',
+      'scope' => 'footer',
+      'weight' => 6,
+      )
+    );
   }
 }
