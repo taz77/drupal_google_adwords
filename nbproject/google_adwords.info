@@ -1,5 +1,0 @@
-name = Google AdWords Conversion
-description = Adds Google AdWords Conversion Tracking javascript code to specific nodes.
-core = 7.x
-package = Statistics
-configure = admin/config/system/google_adwords
