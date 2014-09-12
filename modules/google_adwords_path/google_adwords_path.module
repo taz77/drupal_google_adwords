@@ -58,6 +58,7 @@ function google_adwords_path_help($path, $arg) {
 
 /**
  * Implements hook_page_build().
+ * 
  * This adds the tracking code into the page between the body tags.
  */
 function google_adwords_path_page_build(&$page) {
@@ -124,10 +125,7 @@ function google_adwords_path_get_all_codes() {
 }
 
 /**
- * Load a conversion code by id.
- *
- * @param $cid
- *   The code id.
+ * Function to load a conversion code by id.
  */
 function google_adwords_path_load_code_by_cid($cid) {
   $codes = _google_adwords_path_load_codes($cid);
@@ -141,10 +139,7 @@ function google_adwords_path_load_code_by_cid($cid) {
 }
 
 /**
- * Delete a conversion code by id.
- *
- * @param $cid
- *   The code id.
+ * Function to delete a conversion code by id.
  */
 function google_adwords_path_delete_code_by_cid($cid) {
   $result = db_delete('google_adwords_path')

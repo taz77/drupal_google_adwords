@@ -66,7 +66,13 @@ function google_adwords_path_schema() {
     ),
     'primary key' => array('cid'),
     'indexes' => array(
-      'list' => array('conversion_id', 'conversion_language', 'conversion_format', 'conversion_color', 'conversion_label'),
+      'list' => array(
+        'conversion_id',
+        'conversion_language',
+        'conversion_format',
+        'conversion_color',
+        'conversion_label',
+      ),
     ),
   );
 

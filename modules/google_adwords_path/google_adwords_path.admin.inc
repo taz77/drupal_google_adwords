@@ -11,7 +11,16 @@
 function google_adwords_path_admin_page() {
   $codes = google_adwords_path_get_all_codes();
 
-  $header = array(t('No'), t('Name'), t('Conversion ID'), t('Language'), t('Format'), t('Color'), t('Label'), t('Operations'));
+  $header = array(
+    t('No'),
+    t('Name'),
+    t('Conversion ID'),
+    t('Language'),
+    t('Format'),
+    t('Color'),
+    t('Label'),
+    t('Operations'),
+  );
   $rows = array();
   $count = 1;
   foreach ($codes as $code) {
@@ -147,7 +156,7 @@ function google_adwords_path_code_form_submit($form, &$form_state) {
     // Redirect back to Google Adwords Path admin page.
     drupal_goto('admin/config/system/google_adwords/path');
   }
-  else if ($form_state['clicked_button']['#value'] == 'Delete') {
+  elseif ($form_state['clicked_button']['#value'] == 'Delete') {
     drupal_goto('admin/config/system/google_adwords/path/' . $form_state['values']['cid'] . '/delete');
   }
 }
@@ -172,6 +181,9 @@ function google_adwords_path_code_delete_form($form, &$form_state, $cid) {
   return confirm_form($form, t('Are you sure you want to delete %name?', array('%name' => $code['name'])), $path);
 }
 
+/**
+ * Implements hook_form_submit().
+ */
 function google_adwords_path_code_delete_form_submit($form, &$form_state) {
   if (google_adwords_path_delete_code_by_cid($form_state['values']['cid'])) {
     $message = 'Successfully deleted %name.';
