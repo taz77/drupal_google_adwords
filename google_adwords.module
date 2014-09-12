@@ -27,7 +27,6 @@ function google_adwords_field_info() {
 /**
  * Implements hook_field_is_empty().
  *
- * hook_field_is_emtpy() is where Drupal asks us if this field is empty.
  * Return TRUE if it does not contain data, FALSE if it does. This lets
  * the form API flag an error when required fields are empty.
  */
@@ -38,7 +37,7 @@ function google_adwords_field_is_empty($item, $field) {
 /**
  * Implements hook_field_formatter_info().
  *
- * @see google_adwords_field_formatter_view().
+ * @see google_adwords_field_formatter_view()
  */
 function google_adwords_field_formatter_info() {
   return array(
@@ -52,7 +51,7 @@ function google_adwords_field_formatter_info() {
 /**
  * Implements hook_field_formatter_view().
  *
- * @see google_adwords_field_formatter_info().
+ * @see google_adwords_field_formatter_info()
  */
 function google_adwords_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   global $user;
@@ -104,8 +103,6 @@ function google_adwords_field_widget_info() {
 /**
  * Implements hook_field_widget_form().
  *
- * hook_widget_form() is where Drupal tells us to create form elements for
- * our field's widget.
  */
 function google_adwords_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
   global $language;
@@ -168,6 +165,7 @@ function google_adwords_theme() {
 
 /**
  * Implements template_preprocess_HOOK().
+ * 
  * Loads the proper AdWords external JavaScript file.
  */
 function template_preprocess_google_adwords(&$variables) {
