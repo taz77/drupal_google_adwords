@@ -38,7 +38,7 @@ function google_adwords_field_is_empty($item, $field) {
 /**
  * Implements hook_field_formatter_info().
  *
- * @see google_adwords_field_formatter_view().
+ * @see google_adwords_field_formatter_view()
  */
 function google_adwords_field_formatter_info() {
   return array(
@@ -52,7 +52,7 @@ function google_adwords_field_formatter_info() {
 /**
  * Implements hook_field_formatter_view().
  *
- * @see google_adwords_field_formatter_info().
+ * @see google_adwords_field_formatter_info()
  */
 function google_adwords_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   global $user;

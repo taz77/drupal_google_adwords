@@ -13,7 +13,7 @@ INSTALLATION INSTRUCTIONS
 1.  Follow the instructions for installing Google Adwords module first.
 2.  Login as site administrator.
 3.  Enable the Google Adwords Path module on the Administer -> Modules page 
-    (Under the "Statistics" category).
+(Under the "Statistics" category).
 4.  Navigate to admin/config/system/google_adwords/path in your Drupal instllation.
 5.  Click "Add" to add your first tracking code and the path you want it to show up on
 6.  Check the page/path to see if the tracking code is on the page.

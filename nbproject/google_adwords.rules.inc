@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Rules integration for google adwords conversion tracking.
+ * Rules integration for google adwords conversion tracking
  */
 
 /**
