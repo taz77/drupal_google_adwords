@@ -15,6 +15,7 @@ function google_adwords_path_menu() {
     'access arguments' => array('administer nodes'),
     'file' => 'google_adwords_path.admin.inc',
     'type' => MENU_LOCAL_TASK,
+    'weight' => 15,
   );
   $items['admin/config/system/google_adwords/path/add'] = array(
     'title' => 'Add conversion code',
@@ -47,7 +48,6 @@ function google_adwords_path_menu() {
  */
 function google_adwords_path_help($path, $arg) {
   $output = '';
-
   switch ($path) {
     case 'admin/config/system/google_adwords/path/add':
       $output = '<p>' . t('Use this form to add a new Google Adwords conversion code.') . '</p>';
