@@ -15,6 +15,7 @@ function google_adwords_path_menu() {
     'access arguments' => array('administer nodes'),
     'file' => 'google_adwords_path.admin.inc',
     'type' => MENU_LOCAL_TASK,
+    'weight' => 15,
   );
   $items['admin/config/system/google_adwords/path/add'] = array(
     'title' => 'Add conversion code',
@@ -47,7 +48,6 @@ function google_adwords_path_menu() {
  */
 function google_adwords_path_help($path, $arg) {
   $output = '';
-
   switch ($path) {
     case 'admin/config/system/google_adwords/path/add':
       $output = '<p>' . t('Use this form to add a new Google Adwords conversion code.') . '</p>';
@@ -58,13 +58,14 @@ function google_adwords_path_help($path, $arg) {
 
 /**
  * Implements hook_page_build().
+ * 
  * This adds the tracking code into the page between the body tags.
  */
 function google_adwords_path_page_build(&$page) {
   $codes = google_adwords_path_get_path_codes();
   if (count($codes)) {
     foreach ($codes as $code) {
-      $markup = theme('google_adwords', $code);
+      $markup = _theme('google_adwords', $code);
       $page['page_bottom']['google_adwords_path'] = array(
         '#weight' => 55,
         '#markup' => $markup,
@@ -83,7 +84,7 @@ function google_adwords_path_get_path_codes() {
     $codes = _google_adwords_path_load_codes();
 
     // Allow other modules to alter the codes.
-    drupal_alter('google_adwords_path', $codes);
+    \Drupal::moduleHandler()->alter('google_adwords_path', $codes);
   }
 
   return $codes;
@@ -124,10 +125,7 @@ function google_adwords_path_get_all_codes() {
 }
 
 /**
- * Load a conversion code by id.
- *
- * @param $cid
- *   The code id.
+ * Function to load a conversion code by id.
  */
 function google_adwords_path_load_code_by_cid($cid) {
   $codes = _google_adwords_path_load_codes($cid);
@@ -141,10 +139,7 @@ function google_adwords_path_load_code_by_cid($cid) {
 }
 
 /**
- * Delete a conversion code by id.
- *
- * @param $cid
- *   The code id.
+ * Function to delete a conversion code by id.
  */
 function google_adwords_path_delete_code_by_cid($cid) {
   $result = db_delete('google_adwords_path')

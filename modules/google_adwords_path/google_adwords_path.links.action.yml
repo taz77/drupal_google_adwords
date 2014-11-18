@@ -1,0 +1,5 @@
+google_adwords_path.code_form:
+  route_name: google_adwords_path.code_form
+  title: 'Add conversion code'
+  appears_on:
+    - google_adwords_path.code_form

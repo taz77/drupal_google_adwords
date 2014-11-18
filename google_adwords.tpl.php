@@ -18,4 +18,3 @@
 <noscript>
 <img height="1" width="1" border="0" src="https://www.googleadservices.com/pagead/conversion/<?php print $conversion_id; ?>/?label=<?php print $conversion_label; ?>&amp;guid=ON&amp;script=0"/>
 </noscript>
-

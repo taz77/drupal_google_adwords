@@ -3,3 +3,10 @@ description = Adds Google AdWords Conversion Tracking javascript code to specifi
 core = 7.x
 package = Statistics
 configure = admin/config/system/google_adwords
+
+; Information added by Drupal.org packaging script on 2014-09-28
+version = "7.x-2.0-beta5"
+core = "7.x"
+project = "google_adwords"
+datestamp = "1411900158"
+

@@ -1,0 +1,7 @@
+google_adwords.admin_settings:
+  path: /admin/config/system/google_adwords
+  defaults:
+    _title: 'Google AdWords'
+    _form: \Drupal\google_adwords\Form\GoogleAdwordsAdminSettings
+  requirements:
+    _permission: 'administer google adwords module'

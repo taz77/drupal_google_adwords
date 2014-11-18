@@ -11,13 +11,15 @@
 function google_adwords_install() {
   // @TODO  These needs rewritten using l().
   $t = get_t();
-  drupal_set_message($t(
-      'Google AdWords module installed successfully. You must <a href="@fields">configure a Google Adwords Tracking field</a>. You can set <a href="@permissions">permissions</a> and <a href="@configuration">configure</a> the module.', array(
-    '@permissions' => url('admin/people/permissions', array('fragment' => 'module-google_adwords')),
-    '@configuration' => url('admin/config/system/google_adwords'),
-    '@fields' => url('admin/structure/types'),
-      )
-  ));
+  // @FIXME
+// drupal_set_message($t(
+//       'Google AdWords module installed successfully. You must <a href="@fields">configure a Google Adwords Tracking field</a>. You can set <a href="@permissions">permissions</a> and <a href="@configuration">configure</a> the module.', array(
+//     '@permissions' => \Drupal\Core\Url::fromRoute('user.admin_permissions'),
+//     '@configuration' => url('admin/config/system/google_adwords'),
+//     '@fields' => url('admin/structure/types'),
+//       )
+//   ));
+
 }
 
 /**
@@ -25,9 +27,11 @@ function google_adwords_install() {
  */
 function google_adwords_uninstall() {
   // Remove variables.
-  db_delete('variable')
-    ->condition('name', 'google_adwords%', 'LIKE')
-    ->execute();
+  // @FIXME
+// db_delete('variable')
+//     ->condition('name', 'google_adwords%', 'LIKE')
+//     ->execute();
+
 }
 
 /**
@@ -77,4 +81,3 @@ function google_adwords_field_schema($field) {
     ),
   );
 }
-

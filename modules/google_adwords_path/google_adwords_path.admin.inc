@@ -11,28 +11,42 @@
 function google_adwords_path_admin_page() {
   $codes = google_adwords_path_get_all_codes();
 
-  $header = array(t('No'), t('Name'), t('Conversion ID'), t('Language'), t('Format'), t('Color'), t('Label'), t('Operations'));
+  $header = array(
+    t('No'),
+    t('Name'),
+    t('Conversion ID'),
+    t('Language'),
+    t('Format'),
+    t('Color'),
+    t('Label'),
+    t('Operations'),
+  );
   $rows = array();
   $count = 1;
   foreach ($codes as $code) {
-    $rows[] = array(
-      array('data' => $count),
-      array('data' => $code['name']),
-      array('data' => $code['conversion_id']),
-      array('data' => $code['conversion_language']),
-      array('data' => $code['conversion_format']),
-      array('data' => $code['conversion_color']),
-      array('data' => $code['conversion_label']),
-      array('data' => l(t('edit'), 'admin/config/system/google_adwords/path/' . $code['cid'] . '/edit') . ' ' . l(t('delete'), 'admin/config/system/google_adwords/path/' . $code['cid'] . '/delete')),
-    );
+    // @FIXME
+// $rows[] = array(
+//       array('data' => $count),
+//       array('data' => $code['name']),
+//       array('data' => $code['conversion_id']),
+//       array('data' => $code['conversion_language']),
+//       array('data' => $code['conversion_format']),
+//       array('data' => $code['conversion_color']),
+//       array('data' => $code['conversion_label']),
+//       array('data' => l(t('edit'), 'admin/config/system/google_adwords/path/' . $code['cid'] . '/edit') . ' ' . l(t('delete'), 'admin/config/system/google_adwords/path/' . $code['cid'] . '/delete')),
+//     );
+
     $count++;
   }
 
   if ($rows) {
-    return theme('table', array('header' => $header, 'rows' => $rows));
+    return _theme('table', array('header' => $header, 'rows' => $rows));
   }
   else {
-    return '<p>' . t('No conversion code yet. !add_link?', array('!add_link' => l(t('Add one'), 'admin/config/system/google_adwords/path/add'))) . '</p>';
+    // @FIXME
+// l() expects a Url object, created from a route name or external URI.
+// return '<p>' . t('No conversion code yet. !add_link?', array('!add_link' => l(t('Add one'), 'admin/config/system/google_adwords/path/add'))) . '</p>';
+
   }
 }
 
@@ -40,7 +54,7 @@ function google_adwords_path_admin_page() {
  * Conversion code add / edit form.
  */
 function google_adwords_path_code_form($form, $form_state, $cid = NULL) {
-  global $language;
+  $language = \Drupal::languageManager()->getCurrentLanguage();
   $form = array();
 
   // If updating existing code, add the conversion id to the form.
@@ -69,30 +83,39 @@ function google_adwords_path_code_form($form, $form_state, $cid = NULL) {
     '#maxlength' => 64,
     '#required' => TRUE,
   );
-  $form['conversion_language'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Conversion Language'),
-    '#default_value' => isset($code) ? $code['conversion_language'] : variable_get('google_adwords_conversion_language', $language->language),
-    '#size' => 15,
-    '#maxlength' => 64,
-    '#required' => TRUE,
-  );
-  $form['conversion_format'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Conversion Format'),
-    '#default_value' => isset($code) ? $code['conversion_format'] : variable_get('google_adwords_conversion_format', '2'),
-    '#size' => 15,
-    '#maxlength' => 64,
-    '#required' => TRUE,
-  );
-  $form['conversion_color'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Conversion Color'),
-    '#default_value' => isset($code) ? $code['conversion_color'] : variable_get('google_adwords_conversion_color', 'FFFFFF'),
-    '#size' => 15,
-    '#maxlength' => 64,
-    '#required' => TRUE,
-  );
+  // @FIXME
+// $form['conversion_language'] = array(
+//     '#type' => 'textfield',
+//     '#title' => t('Conversion Language'),
+//     '#default_value' => isset($code) ? $code['conversion_language'] : // @FIXME: This looks like another module's variable. Rewrite the call to use the correct configuration set.
+// variable_get('google_adwords_conversion_language', $language->language),
+//     '#size' => 15,
+//     '#maxlength' => 64,
+//     '#required' => TRUE,
+//   );
+
+  // @FIXME
+// $form['conversion_format'] = array(
+//     '#type' => 'textfield',
+//     '#title' => t('Conversion Format'),
+//     '#default_value' => isset($code) ? $code['conversion_format'] : // @FIXME: This looks like another module's variable. Rewrite the call to use the correct configuration set.
+// variable_get('google_adwords_conversion_format', '2'),
+//     '#size' => 15,
+//     '#maxlength' => 64,
+//     '#required' => TRUE,
+//   );
+
+  // @FIXME
+// $form['conversion_color'] = array(
+//     '#type' => 'textfield',
+//     '#title' => t('Conversion Color'),
+//     '#default_value' => isset($code) ? $code['conversion_color'] : // @FIXME: This looks like another module's variable. Rewrite the call to use the correct configuration set.
+// variable_get('google_adwords_conversion_color', 'FFFFFF'),
+//     '#size' => 15,
+//     '#maxlength' => 64,
+//     '#required' => TRUE,
+//   );
+
   $form['conversion_label'] = array(
     '#type' => 'textfield',
     '#title' => t('Conversion Label'),
@@ -105,8 +128,8 @@ function google_adwords_path_code_form($form, $form_state, $cid = NULL) {
     '#type' => 'textarea',
     '#title' => t('Paths'),
     '#default_value' => isset($code) ? $code['paths'] : '',
-    '#size' => 15,
-    '#maxlength' => 64,
+    '#rows' => 8,
+    '#cols' => 128,
     '#required' => TRUE,
     '#description' => t('A list of paths, separated by a new line, where this conversion code should be inserted.'),
   );
@@ -130,7 +153,7 @@ function google_adwords_path_code_form($form, $form_state, $cid = NULL) {
  */
 function google_adwords_path_code_form_submit($form, &$form_state) {
   if ($form_state['clicked_button']['#value'] == 'Save') {
-    form_state_values_clean($form_state);
+    $form_state->cleanValues();
 
     google_adwords_path_save_code($form_state['values']);
     // Updating an existing conversion code.
@@ -147,7 +170,7 @@ function google_adwords_path_code_form_submit($form, &$form_state) {
     // Redirect back to Google Adwords Path admin page.
     drupal_goto('admin/config/system/google_adwords/path');
   }
-  else if ($form_state['clicked_button']['#value'] == 'Delete') {
+  elseif ($form_state['clicked_button']['#value'] == 'Delete') {
     drupal_goto('admin/config/system/google_adwords/path/' . $form_state['values']['cid'] . '/delete');
   }
 }
@@ -172,6 +195,9 @@ function google_adwords_path_code_delete_form($form, &$form_state, $cid) {
   return confirm_form($form, t('Are you sure you want to delete %name?', array('%name' => $code['name'])), $path);
 }
 
+/**
+ * Implements hook_form_submit().
+ */
 function google_adwords_path_code_delete_form_submit($form, &$form_state) {
   if (google_adwords_path_delete_code_by_cid($form_state['values']['cid'])) {
     $message = 'Successfully deleted %name.';

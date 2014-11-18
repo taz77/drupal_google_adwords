@@ -1,0 +1,22 @@
+google_adwords_path.admin_page:
+  path: /admin/config/system/google_adwords/path
+  defaults:
+    _title: 'Adwords by Path'
+    _content: '\Drupal\google_adwords_path\Controller\DefaultController::google_adwords_path_admin_page'
+  requirements:
+    _permission: 'administer nodes'
+google_adwords_path.code_form:
+  path: '/admin/config/system/google_adwords/path/{cid}/edit'
+  defaults:
+    cid: null
+    _title: 'Edit conversion code'
+    _form: \Drupal\google_adwords_path\Form\GoogleAdwordsPathCodeForm
+  requirements:
+    _permission: 'administer nodes'
+google_adwords_path.code_delete_form:
+  path: '/admin/config/system/google_adwords/path/{cid}/delete'
+  defaults:
+    _title: 'Delete conversion code'
+    _form: \Drupal\google_adwords_path\Form\GoogleAdwordsPathCodeDeleteForm
+  requirements:
+    _permission: 'administer nodes'

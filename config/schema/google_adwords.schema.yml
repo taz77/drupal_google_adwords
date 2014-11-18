@@ -1,0 +1,14 @@
+google_adwords.settings:
+  type: mapping
+  label: Settings
+  mapping:
+    google_adwords_conversion_language:
+      type: string
+    google_adwords_conversion_format:
+      type: string
+    google_adwords_conversion_color:
+      type: string
+    google_adwords_conversion_id:
+      type: string
+    google_adwords_external_script:
+      type: string

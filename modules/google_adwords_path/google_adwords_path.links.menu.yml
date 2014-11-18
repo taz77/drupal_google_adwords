@@ -1,0 +1,6 @@
+google_adwords_path.code_form:
+  route_name: google_adwords_path.code_form
+  title: 'Edit conversion code'
+google_adwords_path.code_delete_form:
+  route_name: google_adwords_path.code_delete_form
+  title: 'Delete conversion code'
