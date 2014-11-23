@@ -4,7 +4,7 @@ core: 8.x
 dependencies:
   - google_adwords
 package: Statistics
-version: 7.x-2.0-beta5
+version: 8.x-1.0-alpha
 project: google_adwords
 datestamp: '1411900158'
 type: module
