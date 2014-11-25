@@ -11,6 +11,8 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use \Drupal\user\RoleInterface;
+use Drupal\Core\Session;
+use Drupal\user\Entity\Role;
 
 class GoogleAdwordsAdminSettings extends ConfigFormBase {
 
@@ -21,7 +23,7 @@ class GoogleAdwordsAdminSettings extends ConfigFormBase {
     return 'google_adwords_admin_settings';
   }
 
-    /**
+  /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
@@ -38,16 +40,15 @@ class GoogleAdwordsAdminSettings extends ConfigFormBase {
 
     parent::submitForm($form, $form_state);
   }
-  
 
   public function buildForm(array $form_state, \Drupal\Core\Form\FormStateInterface $form_state) {
-  
+
     $form['conversion'] = array(
       '#type' => 'fieldset',
       '#title' => t('Default Conversion settings'),
       '#collapsible' => FALSE,
     );
-  
+
     $form['conversion']['google_adwords_conversion_id'] = array(
       '#type' => 'textfield',
       '#title' => t('Conversion ID'),
@@ -93,29 +94,33 @@ class GoogleAdwordsAdminSettings extends ConfigFormBase {
       '#required' => TRUE,
       '#description' => '',
     );
-    // Render the role overview.
-    //$result = db_query('SELECT * FROM {role} ORDER BY name');
-    $result = getRoles();
-  
+    
+    // Render the role overview.       
     $form['conversion']['roles'] = array(
       '#type' => 'fieldset',
       '#title' => t('User Role Tracking'),
       '#collapsible' => TRUE,
       '#description' => t('Define what user roles should be tracked.'),
     );
-  
+    
+    $prefix = 'user.role.';
+    $cut = strlen($prefix);
+    $result = \Drupal::service('config.storage')->listAll($prefix);
+    
     foreach ($result as $role) {
       // Can't use empty spaces in varname.
-      $role_name = $role->name;
-      $role_varname = str_replace(' ', '_', $role_name);
-      $form['conversion']['roles']['google_adwords_track_' . $role_varname] = array(
+      $rid = substr($role, $cut);
+      $config = \Drupal::config("user.role.$rid");
+      $role_name = $config->get('label');      
+      $form['conversion']['roles']['google_adwords_track_' . $rid] = array(
         '#type' => 'checkbox',
         '#title' => t($role_name),
         '#default_value' => // @FIXME: &#039;google_adwords_track_&#039; . $role_varname must be added to your module's default configuration.
-  \Drupal::config('google_adwords.settings')->get('google_adwords_track_' . $role_varname),
+        \Drupal::config('google_adwords.settings')->get('google_adwords_track_' . $role_varname),
       );
     }
-  
+
     return parent::buildForm($form, $form_state);
   }
+
 }
