@@ -61,7 +61,8 @@ function google_adwords_field_formatter_view($entity_type, $entity, $field, $ins
   $trackable = 0;
   if (is_array($user->roles)) {
     foreach ($user->roles as $role) {
-      $role = str_replace(' ', '_', $role);
+      $translated_role = t($role);
+      $role = str_replace(' ', '_', $translated_role);
       $trackable += variable_get('google_adwords_track_' . $role, FALSE);
     }
   }
