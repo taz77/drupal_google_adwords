@@ -53,6 +53,15 @@ function google_adwords_signup_form_alter(&$form, &$form_state, $form_id) {
       '#required' => TRUE,
       '#description' => '',
     );
+    $form['user_conversion']['google_adwords_user_conversion_label'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Conversion Label'),
+      '#default_value' => variable_get('google_adwords_user_conversion_label', 'User Signup'),
+      '#size' => 15,
+      '#maxlength' => 255,
+      '#required' => TRUE,
+      '#description' => '',
+    );
   }
 
   if ($form_id == 'user_register_form') {
@@ -81,7 +90,7 @@ function google_adwords_signup_preprocess_html($variables) {
       'conversion_langauge' => variable_get('google_adwords_user_conversion_language', $language->language),
       'conversion_format' => variable_get('google_adwords_user_conversion_format', '2'),
       'conversion_color' => variable_get('google_adwords_user_conversion_color', 'FFFFFF'),
-      'conversion_label' => 'User Signup',
+      'conversion_label' => variable_get('google_adwords_user_conversion_label', 'User Signup'),
     );
 
     drupal_add_js(
