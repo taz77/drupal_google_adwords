@@ -94,13 +94,13 @@ function google_adwords_signup_preprocess_html($variables) {
     );
 
     drupal_add_js(
-      '\/* <![CDATA[ *\/
+      '/* <![CDATA[ */
         var google_conversion_id = ' . $conversion_values['conversion_id'] . ';
         var google_conversion_language = "' . $conversion_values['conversion_langauge'] . '";
         var google_conversion_format = "' . $conversion_values['conversion_format'] . '";
         var google_conversion_color = "' . $conversion_values['conversion_color'] . '";
         var google_conversion_label = "' . $conversion_values['conversion_label'] . '";
-     \/* ]]> *\/', array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
+     /* ]]> */', array('type' => 'inline', 'scope' => 'footer', 'weight' => 5));
 
     drupal_add_js(variable_get('google_adwords_external_script', 'https://www.googleadservices.com/pagead/conversion.js'), array(
       'type' => 'external',
