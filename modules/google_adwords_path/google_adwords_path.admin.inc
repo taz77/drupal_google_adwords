@@ -138,7 +138,7 @@ function google_adwords_path_code_form($form, $form_state, $cid = NULL) {
  * Submit handler for conversion code add or edit form.
  */
 function google_adwords_path_code_form_submit($form, &$form_state) {
-  if ($form_state['clicked_button']['#value'] == 'Save') {
+  if ($form_state['clicked_button']['#value'] == t('Save')) {
     form_state_values_clean($form_state);
 
     google_adwords_path_save_code($form_state['values']);
@@ -156,7 +156,7 @@ function google_adwords_path_code_form_submit($form, &$form_state) {
     // Redirect back to Google Adwords Path admin page.
     drupal_goto('admin/config/system/google_adwords/path');
   }
-  elseif ($form_state['clicked_button']['#value'] == 'Delete') {
+  elseif ($form_state['clicked_button']['#value'] == t('Delete')) {
     drupal_goto('admin/config/system/google_adwords/path/' . $form_state['values']['cid'] . '/delete');
   }
 }
