@@ -18,7 +18,8 @@ INSTALLATION INSTRUCTIONS
 3.  Enable the Google Adwords module on the Administer -> Modules page 
     (Under the "Statistics" category).
 4.  Fill in required and desired settings on the Administer -> Configuration -> 
-    System -> Google Adwords page.
+    System -> Google Adwords page. This includes specifying which role(s) the 
+    Adwords code should be displayed for.
 5.  To complete the installation you will now have to add the Google Adwords 
     field to a content type.  Under Structure -> Content Types -> 
     <Choose Your Content Type> -> Manage Fields -> Add new field 
@@ -31,4 +32,11 @@ INSTALLATION INSTRUCTIONS
     Now edit a node that you want to track.  Find the Google Adwords field and 
     supply the "Converstion label" that Google Adwords gave you when you setup 
     tracking look for "var google_conversion_label = "SOMELONGSTRINGOFSTUFF";"
-8.  Enjoy better ROI tracking on your PPC campaigns.
+8. Once you have created a node with the Adwords tracking code, view the source
+   code of the finished node and locate the tracking code to verify it is there.
+   Make sure you view the page as a user with one of the roles assigned in 
+   step 4. If you chose only the Anonymous role, make sure to log out before 
+   viewing the page.
+9. Once you start getting conversions via the page, verify in Google Adwords 
+   that the conversions are showing up in your Adwords reports.
+10.Enjoy better ROI tracking on your PPC campaigns.
