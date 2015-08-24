@@ -50,6 +50,12 @@ function google_adwords_rules_action_info() {
         'optional' => TRUE,
         'default value' => '1',
       ),
+      'currency' => array(
+        'type' => 'text',
+        'label' => t('Format'),
+        'optional' => TRUE,
+        'default value' => 'EUR',
+      ),
     ),
     'group' => t('Google Adwords'),
   );

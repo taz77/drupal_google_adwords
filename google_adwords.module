@@ -161,6 +161,7 @@ function google_adwords_theme() {
         'conversion_format' => NULL,
         'conversion_color' => NULL,
         'conversion_label' => NULL,
+        'conversion_value' => NULL,
       ),
       'template' => 'google_adwords',
     ),
@@ -217,20 +218,44 @@ function google_adwords_menu() {
  * The rules integration calls this function.
  * Use this to set a custom tracking not related to a entity.
  */
-function google_adwords_add_tracking($conversion_id, $label = NULL, $value = NULL, $language = NULL, $color = NULL, $format = NULL) {
-  $cache = &drupal_static(__FUNCTION__, array());
+function google_adwords_add_tracking($conversion_id, $label = NULL, $value = NULL, $language = NULL, $color = NULL, $format = NULL, $currency = NULL) {
 
   $label = ($label) ? $label : base64_encode($conversion_id);
   $language = ($language) ? $language : 'en';
   $color = ($color) ? $color : 'FFFFFF';
   $format = ($format) ? $format : 1;
+  $currency = ($currency) ? $currency : 'EUR';
 
-  $cache[$conversion_id] = array(
+  $_SESSION['google_adwords_rules_traking_codes'][$conversion_id] = array(
     'conversion_id' => $conversion_id,
-    'label' => $label,
-    'language' => $language,
-    'color' => $color,
-    'format' => $format,
-    'value' => $value,
+    'conversion_label' => $label,
+    'conversion_language' => $language,
+    'conversion_color' => $color,
+    'conversion_format' => $format,
+    'conversion_value' => $value,
+    'conversion_currency' => $currency,
   );
+}
+
+/**
+ * Implements hook_page_build().
+ *
+ * This adds the tracking code into the page between the body tags.
+ */
+function google_adwords_page_build(&$page) {
+
+  if (isset($_SESSION['google_adwords_rules_traking_codes'])) {
+    $codes = $_SESSION['google_adwords_rules_traking_codes'];
+
+    foreach ($codes as $code) {
+      $markup = theme('google_adwords', $code);
+      $page['page_bottom']['google_adwords_path'] = array(
+        '#weight' => 55,
+        '#markup' => $markup,
+      );
+    }
+
+    unset($_SESSION['google_adwords_rules_traking_codes']);
+  }
+
 }
