@@ -1,7 +1,4 @@
-<?php /**
- * @file
- * Contains \Drupal\google_adwords\Plugin\Field\FieldWidget\GoogleAdwordsText.
- */
+<?php
 
 namespace Drupal\google_adwords\Plugin\Field\FieldWidget;
 

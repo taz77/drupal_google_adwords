@@ -1,7 +1,4 @@
-<?php /**
- * @file
- * Contains \Drupal\google_adwords\Plugin\Field\FieldFormatter\GoogleAdwordsDefault.
- */
+<?php
 
 namespace Drupal\google_adwords\Plugin\Field\FieldFormatter;
 

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\google_adwords\Form\GoogleAdwordsAdminSettings.
- */
-
 namespace Drupal\google_adwords\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
