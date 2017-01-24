@@ -11,15 +11,15 @@
 function google_adwords_install() {
   // @TODO  These needs rewritten using l().
 //  $t = get_t();
-//  
+//
   // @FIXME
 
   drupal_set_message(
-     t('Google AdWords module installed successfully. You must <a href="@fields">configure a Google Adwords Tracking field</a>. You can set <a href="@permissions">permissions</a> and <a href="@configuration">configure</a> the module.'), array(
+    t('Google AdWords module installed successfully. You must <a href="@fields">configure a Google Adwords Tracking field</a>. You can set <a href="@permissions">permissions</a> and <a href="@configuration">configure</a> the module.'), [
     '@permissions' => \Drupal\Core\Url::fromRoute('user.admin_permissions'),
 //    '@configuration' => url('admin/config/system/google_adwords'),
 //    '@fields' => url('admin/structure/types'),
-  ));
+  ]);
 }
 
 /**
@@ -37,46 +37,46 @@ function google_adwords_uninstall() {
  * Implements hook_field_schema().
  */
 function google_adwords_field_schema($field) {
-  return array(
-    'columns' => array(
-      'conversion_id' => array(
+  return [
+    'columns' => [
+      'conversion_id' => [
         'description' => 'The conversion id.',
         'type' => 'varchar',
         'length' => 255,
         'default' => '',
         'not null' => FALSE,
-      ),
-      'conversion_language' => array(
+      ],
+      'conversion_language' => [
         'description' => 'The conversion language.',
         'type' => 'varchar',
         'length' => 255,
         'default' => '',
         'not null' => FALSE,
-      ),
-      'conversion_format' => array(
+      ],
+      'conversion_format' => [
         'description' => 'The conversion format.',
         'type' => 'varchar',
         'length' => 255,
         'default' => '',
         'not null' => FALSE,
-      ),
-      'conversion_color' => array(
+      ],
+      'conversion_color' => [
         'description' => 'The conversion color.',
         'type' => 'varchar',
         'length' => 255,
         'default' => '',
         'not null' => FALSE,
-      ),
-      'conversion_label' => array(
+      ],
+      'conversion_label' => [
         'description' => 'The conversion label.',
         'type' => 'varchar',
         'length' => 255,
         'default' => '',
         'not null' => FALSE,
-      ),
-    ),
-    'indexes' => array(
-      'conv_id' => array('conversion_id'),
-    ),
-  );
+      ],
+    ],
+    'indexes' => [
+      'conv_id' => ['conversion_id'],
+    ],
+  ];
 }

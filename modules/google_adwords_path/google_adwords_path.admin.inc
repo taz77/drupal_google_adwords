@@ -11,7 +11,7 @@
 function google_adwords_path_admin_page() {
   $codes = google_adwords_path_get_all_codes();
 
-  $header = array(
+  $header = [
     t('No'),
     t('Name'),
     t('Conversion ID'),
@@ -20,8 +20,8 @@ function google_adwords_path_admin_page() {
     t('Color'),
     t('Label'),
     t('Operations'),
-  );
-  $rows = array();
+  ];
+  $rows = [];
   $count = 1;
   foreach ($codes as $code) {
     // @FIXME
@@ -40,7 +40,7 @@ function google_adwords_path_admin_page() {
   }
 
   if ($rows) {
-    return _theme('table', array('header' => $header, 'rows' => $rows));
+    return _theme('table', ['header' => $header, 'rows' => $rows]);
   }
   else {
     // @FIXME
@@ -55,18 +55,18 @@ function google_adwords_path_admin_page() {
  */
 function google_adwords_path_code_form($form, $form_state, $cid = NULL) {
   $language = \Drupal::languageManager()->getCurrentLanguage();
-  $form = array();
+  $form = [];
 
   // If updating existing code, add the conversion id to the form.
   if ($cid) {
     $code = google_adwords_path_load_code_by_cid($cid);
-    $form['cid'] = array(
+    $form['cid'] = [
       '#type' => 'value',
       '#value' => $cid,
-    );
+    ];
   }
 
-  $form['name'] = array(
+  $form['name'] = [
     '#type' => 'textfield',
     '#title' => t('Name'),
     '#default_value' => isset($code) ? $code['name'] : '',
@@ -74,15 +74,15 @@ function google_adwords_path_code_form($form, $form_state, $cid = NULL) {
     '#maxlength' => 64,
     '#required' => TRUE,
     '#description' => t('The name of this conversion code. This will appear in the administrative interface to easily identify it.'),
-  );
-  $form['conversion_id'] = array(
+  ];
+  $form['conversion_id'] = [
     '#type' => 'textfield',
     '#title' => t('Conversion ID'),
     '#default_value' => isset($code) ? $code['conversion_id'] : '',
     '#size' => 15,
     '#maxlength' => 64,
     '#required' => TRUE,
-  );
+  ];
   // @FIXME
 // $form['conversion_language'] = array(
 //     '#type' => 'textfield',
@@ -116,15 +116,15 @@ function google_adwords_path_code_form($form, $form_state, $cid = NULL) {
 //     '#required' => TRUE,
 //   );
 
-  $form['conversion_label'] = array(
+  $form['conversion_label'] = [
     '#type' => 'textfield',
     '#title' => t('Conversion Label'),
     '#default_value' => isset($code) ? $code['conversion_label'] : '',
     '#size' => 30,
     '#maxlength' => 64,
     '#required' => TRUE,
-  );
-  $form['paths'] = array(
+  ];
+  $form['paths'] = [
     '#type' => 'textarea',
     '#title' => t('Paths'),
     '#default_value' => isset($code) ? $code['paths'] : '',
@@ -132,17 +132,17 @@ function google_adwords_path_code_form($form, $form_state, $cid = NULL) {
     '#cols' => 128,
     '#required' => TRUE,
     '#description' => t('A list of paths, separated by a new line, where this conversion code should be inserted.'),
-  );
-  $form['submit'] = array(
+  ];
+  $form['submit'] = [
     '#type' => 'submit',
     '#value' => t('Save'),
-  );
+  ];
 
   if ($cid) {
-    $form['delete'] = array(
+    $form['delete'] = [
       '#type' => 'submit',
       '#value' => t('Delete'),
-    );
+    ];
   }
 
   return $form;
@@ -165,7 +165,7 @@ function google_adwords_path_code_form_submit($form, &$form_state) {
       $message = 'Successfully added %name.';
     }
 
-    drupal_set_message(t($message, array('%name' => $form_state['values']['name'])));
+    drupal_set_message(t($message, ['%name' => $form_state['values']['name']]));
 
     // Redirect back to Google Adwords Path admin page.
     drupal_goto('admin/config/system/google_adwords/path');
@@ -179,20 +179,20 @@ function google_adwords_path_code_form_submit($form, &$form_state) {
  * Confirmation form before deleting conversion code.
  */
 function google_adwords_path_code_delete_form($form, &$form_state, $cid) {
-  $form = array();
+  $form = [];
   $path = 'admin/config/system/google_adwords/path';
 
   $code = google_adwords_path_load_code_by_cid($cid);
-  $form['cid'] = array(
+  $form['cid'] = [
     '#type' => 'value',
     '#value' => $code['cid'],
-  );
-  $form['name'] = array(
+  ];
+  $form['name'] = [
     '#type' => 'value',
     '#value' => $code['name'],
-  );
+  ];
 
-  return confirm_form($form, t('Are you sure you want to delete %name?', array('%name' => $code['name'])), $path);
+  return confirm_form($form, t('Are you sure you want to delete %name?', ['%name' => $code['name']]), $path);
 }
 
 /**
@@ -206,7 +206,7 @@ function google_adwords_path_code_delete_form_submit($form, &$form_state) {
     $message = 'There was a problem deleting Google Adwords Conversion code, %name.';
   }
 
-  drupal_set_message(t($message, array('%name' => $form_state['values']['name'])));
+  drupal_set_message(t($message, ['%name' => $form_state['values']['name']]));
 
 
   drupal_goto('admin/config/system/google_adwords/path');

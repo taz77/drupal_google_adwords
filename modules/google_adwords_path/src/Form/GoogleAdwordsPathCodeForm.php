@@ -20,22 +20,21 @@ class GoogleAdwordsPathCodeForm extends FormBase {
     return 'google_adwords_path_code_form';
   }
 
-  
 
   public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state, $cid = NULL) {
     $language = \Drupal::languageManager()->getCurrentLanguage();
-    $form = array();
-  
+    $form = [];
+
     // If updating existing code, add the conversion id to the form.
     if ($cid) {
       $code = google_adwords_path_load_code_by_cid($cid);
-      $form['cid'] = array(
+      $form['cid'] = [
         '#type' => 'value',
         '#value' => $cid,
-      );
+      ];
     }
-  
-    $form['name'] = array(
+
+    $form['name'] = [
       '#type' => 'textfield',
       '#title' => t('Name'),
       '#default_value' => isset($code) ? $code['name'] : '',
@@ -43,57 +42,57 @@ class GoogleAdwordsPathCodeForm extends FormBase {
       '#maxlength' => 64,
       '#required' => TRUE,
       '#description' => t('The name of this conversion code. This will appear in the administrative interface to easily identify it.'),
-    );
-    $form['conversion_id'] = array(
+    ];
+    $form['conversion_id'] = [
       '#type' => 'textfield',
       '#title' => t('Conversion ID'),
       '#default_value' => isset($code) ? $code['conversion_id'] : '',
       '#size' => 15,
       '#maxlength' => 64,
       '#required' => TRUE,
-    );
+    ];
     // @FIXME
-  // $form['conversion_language'] = array(
-  //     '#type' => 'textfield',
-  //     '#title' => t('Conversion Language'),
-  //     '#default_value' => isset($code) ? $code['conversion_language'] : // @FIXME: This looks like another module's variable. Rewrite the call to use the correct configuration set.
-  // variable_get('google_adwords_conversion_language', $language->language),
-  //     '#size' => 15,
-  //     '#maxlength' => 64,
-  //     '#required' => TRUE,
-  //   );
-  
+    // $form['conversion_language'] = array(
+    //     '#type' => 'textfield',
+    //     '#title' => t('Conversion Language'),
+    //     '#default_value' => isset($code) ? $code['conversion_language'] : // @FIXME: This looks like another module's variable. Rewrite the call to use the correct configuration set.
+    // variable_get('google_adwords_conversion_language', $language->language),
+    //     '#size' => 15,
+    //     '#maxlength' => 64,
+    //     '#required' => TRUE,
+    //   );
+
     // @FIXME
-  // $form['conversion_format'] = array(
-  //     '#type' => 'textfield',
-  //     '#title' => t('Conversion Format'),
-  //     '#default_value' => isset($code) ? $code['conversion_format'] : // @FIXME: This looks like another module's variable. Rewrite the call to use the correct configuration set.
-  // variable_get('google_adwords_conversion_format', '2'),
-  //     '#size' => 15,
-  //     '#maxlength' => 64,
-  //     '#required' => TRUE,
-  //   );
-  
+    // $form['conversion_format'] = array(
+    //     '#type' => 'textfield',
+    //     '#title' => t('Conversion Format'),
+    //     '#default_value' => isset($code) ? $code['conversion_format'] : // @FIXME: This looks like another module's variable. Rewrite the call to use the correct configuration set.
+    // variable_get('google_adwords_conversion_format', '2'),
+    //     '#size' => 15,
+    //     '#maxlength' => 64,
+    //     '#required' => TRUE,
+    //   );
+
     // @FIXME
-  // $form['conversion_color'] = array(
-  //     '#type' => 'textfield',
-  //     '#title' => t('Conversion Color'),
-  //     '#default_value' => isset($code) ? $code['conversion_color'] : // @FIXME: This looks like another module's variable. Rewrite the call to use the correct configuration set.
-  // variable_get('google_adwords_conversion_color', 'FFFFFF'),
-  //     '#size' => 15,
-  //     '#maxlength' => 64,
-  //     '#required' => TRUE,
-  //   );
-  
-    $form['conversion_label'] = array(
+    // $form['conversion_color'] = array(
+    //     '#type' => 'textfield',
+    //     '#title' => t('Conversion Color'),
+    //     '#default_value' => isset($code) ? $code['conversion_color'] : // @FIXME: This looks like another module's variable. Rewrite the call to use the correct configuration set.
+    // variable_get('google_adwords_conversion_color', 'FFFFFF'),
+    //     '#size' => 15,
+    //     '#maxlength' => 64,
+    //     '#required' => TRUE,
+    //   );
+
+    $form['conversion_label'] = [
       '#type' => 'textfield',
       '#title' => t('Conversion Label'),
       '#default_value' => isset($code) ? $code['conversion_label'] : '',
       '#size' => 30,
       '#maxlength' => 64,
       '#required' => TRUE,
-    );
-    $form['paths'] = array(
+    ];
+    $form['paths'] = [
       '#type' => 'textarea',
       '#title' => t('Paths'),
       '#default_value' => isset($code) ? $code['paths'] : '',
@@ -101,26 +100,26 @@ class GoogleAdwordsPathCodeForm extends FormBase {
       '#cols' => 128,
       '#required' => TRUE,
       '#description' => t('A list of paths, separated by a new line, where this conversion code should be inserted.'),
-    );
-    $form['submit'] = array(
+    ];
+    $form['submit'] = [
       '#type' => 'submit',
       '#value' => t('Save'),
-    );
-  
+    ];
+
     if ($cid) {
-      $form['delete'] = array(
+      $form['delete'] = [
         '#type' => 'submit',
         '#value' => t('Delete'),
-      );
+      ];
     }
-  
+
     return $form;
   }
 
   public function submitForm(array &$form, FormStateInterface $form_state) {
     if ($form_state['clicked_button']['#value'] == 'Save') {
       $form_state->cleanValues();
-  
+
       google_adwords_path_save_code($form_state->getValues());
       // Updating an existing conversion code.
       if (isset($form_state->getValues()['cid'])) {
@@ -130,9 +129,9 @@ class GoogleAdwordsPathCodeForm extends FormBase {
       else {
         $message = 'Successfully added %name.';
       }
-  
-      drupal_set_message(t($message, array('%name' => $form_state->getValues()['name'])));
-  
+
+      drupal_set_message(t($message, ['%name' => $form_state->getValues()['name']]));
+
       // Redirect back to Google Adwords Path admin page.
       drupal_goto('admin/config/system/google_adwords/path');
     }

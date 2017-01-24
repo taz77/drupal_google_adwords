@@ -9,36 +9,36 @@
  * Implements hook_menu().
  */
 function google_adwords_path_menu() {
-  $items['admin/config/system/google_adwords/path'] = array(
+  $items['admin/config/system/google_adwords/path'] = [
     'title' => 'Adwords by Path',
     'page callback' => 'google_adwords_path_admin_page',
-    'access arguments' => array('administer nodes'),
+    'access arguments' => ['administer nodes'],
     'file' => 'google_adwords_path.admin.inc',
     'type' => MENU_LOCAL_TASK,
     'weight' => 15,
-  );
-  $items['admin/config/system/google_adwords/path/add'] = array(
+  ];
+  $items['admin/config/system/google_adwords/path/add'] = [
     'title' => 'Add conversion code',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('google_adwords_path_code_form'),
-    'access arguments' => array('administer nodes'),
+    'page arguments' => ['google_adwords_path_code_form'],
+    'access arguments' => ['administer nodes'],
     'file' => 'google_adwords_path.admin.inc',
     'type' => MENU_LOCAL_ACTION,
-  );
-  $items['admin/config/system/google_adwords/path/%/edit'] = array(
+  ];
+  $items['admin/config/system/google_adwords/path/%/edit'] = [
     'title' => 'Edit conversion code',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('google_adwords_path_code_form', 5),
-    'access arguments' => array('administer nodes'),
+    'page arguments' => ['google_adwords_path_code_form', 5],
+    'access arguments' => ['administer nodes'],
     'file' => 'google_adwords_path.admin.inc',
-  );
-  $items['admin/config/system/google_adwords/path/%/delete'] = array(
+  ];
+  $items['admin/config/system/google_adwords/path/%/delete'] = [
     'title' => 'Delete conversion code',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('google_adwords_path_code_delete_form', 5),
-    'access arguments' => array('administer nodes'),
+    'page arguments' => ['google_adwords_path_code_delete_form', 5],
+    'access arguments' => ['administer nodes'],
     'file' => 'google_adwords_path.admin.inc',
-  );
+  ];
 
   return $items;
 }
@@ -58,7 +58,7 @@ function google_adwords_path_help($path, $arg) {
 
 /**
  * Implements hook_page_build().
- * 
+ *
  * This adds the tracking code into the page between the body tags.
  */
 function google_adwords_path_page_build(&$page) {
@@ -66,10 +66,10 @@ function google_adwords_path_page_build(&$page) {
   if (count($codes)) {
     foreach ($codes as $code) {
       $markup = _theme('google_adwords', $code);
-      $page['page_bottom']['google_adwords_path'] = array(
+      $page['page_bottom']['google_adwords_path'] = [
         '#weight' => 55,
         '#markup' => $markup,
-      );
+      ];
     }
   }
 }
@@ -178,7 +178,7 @@ function google_adwords_path_google_adwords_path_alter(&$codes) {
  * Internal function to load all unique codes from the database.
  */
 function _google_adwords_path_load_codes($cid = NULL) {
-  $codes = array();
+  $codes = [];
   $result = db_select('google_adwords_path', 'g')
     ->fields('g');
 

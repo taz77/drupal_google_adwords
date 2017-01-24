@@ -11,17 +11,17 @@
  * Provides the description of the field.
  */
 function google_adwords_field_info() {
-  return array(
+  return [
     // We name our field as the associative name of the array.
-    'google_adwords_tracking' => array(
+    'google_adwords_tracking' => [
       'label' => t('Google Adwords'),
       'description' => t('Add the Google Adwords Trackin Conversion info for this entity.'),
-      'settings' => array(),
-      'instance_settings' => array(),
+      'settings' => [],
+      'instance_settings' => [],
       'default_widget' => 'google_adwords_text',
       'default_formatter' => 'google_adwords_default',
-    ),
-  );
+    ],
+  ];
 }
 
 /**
@@ -41,12 +41,12 @@ function google_adwords_field_is_empty($item, $field) {
  * @see google_adwords_field_formatter_view().
  */
 function google_adwords_field_formatter_info() {
-  return array(
-    'google_adwords_default' => array(
+  return [
+    'google_adwords_default' => [
       'label' => t('Default'),
-      'field types' => array('google_adwords_tracking'),
-    ),
-  );
+      'field types' => ['google_adwords_tracking'],
+    ],
+  ];
 }
 
 /**
@@ -56,14 +56,15 @@ function google_adwords_field_formatter_info() {
  */
 function google_adwords_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $user = \Drupal::currentUser();
-  $element = array();
+  $element = [];
 
   $trackable = 0;
   if (is_array($user->roles)) {
     foreach ($user->roles as $role) {
       $role = str_replace(' ', '_', $role);
       $trackable += // @FIXME: &#039;google_adwords_track_&#039; . $role must be added to your module's default configuration.
-\Drupal::config('google_adwords.settings')->get('google_adwords_track_' . $role);
+        \Drupal::config('google_adwords.settings')
+          ->get('google_adwords_track_' . $role);
     }
   }
 
@@ -71,12 +72,12 @@ function google_adwords_field_formatter_view($entity_type, $entity, $field, $ins
     switch ($display['type']) {
       case 'google_adwords_default':
         foreach ($items as $delta => $item) {
-          $element[$delta] = array(
+          $element[$delta] = [
             '#markup' => _theme('google_adwords', $item),
-            '#attached' => array(
-              'css' => array(drupal_get_path('module', 'google_adwords') . '/google_adwords.css'),
-            ),
-          );
+            '#attached' => [
+              'css' => [drupal_get_path('module', 'google_adwords') . '/google_adwords.css'],
+            ],
+          ];
         }
         break;
     }
@@ -94,12 +95,12 @@ function google_adwords_field_formatter_view($entity_type, $entity, $field, $ins
  * @see google_adwords_field_widget_form()
  */
 function google_adwords_field_widget_info() {
-  return array(
-    'google_adwords_text' => array(
+  return [
+    'google_adwords_text' => [
       'label' => t('Google AdWords Text Field'),
-      'field types' => array('google_adwords_tracking'),
-    ),
-  );
+      'field types' => ['google_adwords_tracking'],
+    ],
+  ];
 }
 
 /**
@@ -117,34 +118,38 @@ function google_adwords_field_widget_form(&$form, &$form_state, $field, $instanc
     $element['#attributes']['class'][] = 'google-adwords-textfields';
     $element['#attached']['css'][] = drupal_get_path('module', 'google_adwords') . '/google_adwords.css';
 
-    $element['conversion_id'] = array(
+    $element['conversion_id'] = [
       '#type' => 'textfield',
       '#title' => 'Conversion ID',
-      '#default_value' => isset($items[$delta]['conversion_id']) ? $items[$delta]['conversion_id'] : \Drupal::config('google_adwords.settings')->get('google_adwords_conversion_id'),
-    );
-    $element['conversion_language'] = array(
+      '#default_value' => isset($items[$delta]['conversion_id']) ? $items[$delta]['conversion_id'] : \Drupal::config('google_adwords.settings')
+        ->get('google_adwords_conversion_id'),
+    ];
+    $element['conversion_language'] = [
       '#type' => 'textfield',
       '#title' => 'Language',
       '#default_value' => isset($items[$delta]['conversion_language']) ? $items[$delta]['conversion_language'] : // @FIXME: This variable's value could not be added to your module's default configuration, because it is dynamic (NULL was used instead). Please set a valid default for this variable.
-\Drupal::config('google_adwords.settings')->get('google_adwords_conversion_language'),
-    );
-    $element['conversion_format'] = array(
+        \Drupal::config('google_adwords.settings')
+          ->get('google_adwords_conversion_language'),
+    ];
+    $element['conversion_format'] = [
       '#type' => 'textfield',
       '#title' => 'Format',
-      '#default_value' => isset($items[$delta]['conversion_format']) ? $items[$delta]['conversion_format'] : \Drupal::config('google_adwords.settings')->get('google_adwords_conversion_format'),
-    );
-    $element['conversion_color'] = array(
+      '#default_value' => isset($items[$delta]['conversion_format']) ? $items[$delta]['conversion_format'] : \Drupal::config('google_adwords.settings')
+        ->get('google_adwords_conversion_format'),
+    ];
+    $element['conversion_color'] = [
       '#type' => 'textfield',
       '#title' => 'Color',
-      '#default_value' => isset($items[$delta]['conversion_color']) ? $items[$delta]['conversion_color'] : \Drupal::config('google_adwords.settings')->get('google_adwords_conversion_color'),
+      '#default_value' => isset($items[$delta]['conversion_color']) ? $items[$delta]['conversion_color'] : \Drupal::config('google_adwords.settings')
+        ->get('google_adwords_conversion_color'),
       '#size' => 7,
       '#maxlength' => 6,
-    );
-    $element['conversion_label'] = array(
+    ];
+    $element['conversion_label'] = [
       '#type' => 'textfield',
       '#title' => 'Report label',
       '#default_value' => isset($items[$delta]['conversion_label']) ? $items[$delta]['conversion_label'] : '',
-    );
+    ];
   }
 
   return $element;
@@ -154,18 +159,18 @@ function google_adwords_field_widget_form(&$form, &$form_state, $field, $instanc
  * Implements hook_theme().
  */
 function google_adwords_theme() {
-  return array(
-    'google_adwords' => array(
-      'variables' => array(
+  return [
+    'google_adwords' => [
+      'variables' => [
         'conversion_id' => NULL,
         'conversion_language' => NULL,
         'conversion_format' => NULL,
         'conversion_color' => NULL,
         'conversion_label' => NULL,
-      ),
+      ],
       'template' => 'google_adwords',
-    ),
-  );
+    ],
+  ];
 }
 
 /**
@@ -173,42 +178,43 @@ function google_adwords_theme() {
  * Loads the proper AdWords external JavaScript file.
  */
 function template_preprocess_google_adwords(&$variables) {
-  $variables['google_js'] = \Drupal::config('google_adwords.settings')->get('google_adwords_external_script');
+  $variables['google_js'] = \Drupal::config('google_adwords.settings')
+    ->get('google_adwords_external_script');
 }
 
 /**
  * Implements hook_permission().
  */
 function google_adwords_permission() {
-  return array(
-    'administer google adwords module' => array(
+  return [
+    'administer google adwords module' => [
       'title' => t('Administer Google Adwords Module'),
-    ),
-    'edit google adwords parameters' => array(
+    ],
+    'edit google adwords parameters' => [
       'title' => t('Edit Google Adwords Parameters'),
-    ),
-  );
+    ],
+  ];
 }
 
 /**
  * Implements hook_menu().
  */
 function google_adwords_menu() {
-  $items = array();
-  $items['admin/config/system/google_adwords'] = array(
+  $items = [];
+  $items['admin/config/system/google_adwords'] = [
     'title' => 'Google AdWords',
     'description' => 'Google AdWords Settings page.',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('google_adwords_admin_settings'),
-    'access arguments' => array('administer google adwords module'),
+    'page arguments' => ['google_adwords_admin_settings'],
+    'access arguments' => ['administer google adwords module'],
     'file' => 'google_adwords.admin.inc',
     'type' => MENU_NORMAL_ITEM,
-  );
-  $items['admin/config/system/google_adwords/default'] = array(
+  ];
+  $items['admin/config/system/google_adwords/default'] = [
     'title' => 'Google Adwords',
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => 0,
-  );
+  ];
   return $items;
 }
 
@@ -219,19 +225,19 @@ function google_adwords_menu() {
  * Use this to set a custom tracking not related to a entity.
  */
 function google_adwords_add_tracking($conversion_id, $label = NULL, $value = NULL, $language = NULL, $color = NULL, $format = NULL) {
-  $cache = &drupal_static(__FUNCTION__, array());
+  $cache = &drupal_static(__FUNCTION__, []);
 
   $label = ($label) ? $label : base64_encode($conversion_id);
   $language = ($language) ? $language : 'en';
   $color = ($color) ? $color : 'FFFFFF';
   $format = ($format) ? $format : 1;
 
-  $cache[$conversion_id] = array(
+  $cache[$conversion_id] = [
     'conversion_id' => $conversion_id,
     'label' => $label,
     'language' => $language,
     'color' => $color,
     'format' => $format,
     'value' => $value,
-  );
+  ];
 }
