@@ -45,13 +45,13 @@ class GoogleAdwordsAdminSettings extends ConfigFormBase {
 
     $form['conversion'] = array(
       '#type' => 'fieldset',
-      '#title' => t('Default Conversion settings'),
+      '#title' => $this->t('Default Conversion settings'),
       '#collapsible' => FALSE,
     );
 
     $form['conversion']['google_adwords_conversion_id'] = array(
       '#type' => 'textfield',
-      '#title' => t('Conversion ID'),
+      '#title' => $this->t('Conversion ID'),
       '#default_value' => \Drupal::config('google_adwords.settings')->get('google_adwords_conversion_id'),
       '#size' => 15,
       '#maxlength' => 255,
@@ -60,7 +60,7 @@ class GoogleAdwordsAdminSettings extends ConfigFormBase {
     );
     $form['conversion']['google_adwords_conversion_language'] = array(
       '#type' => 'textfield',
-      '#title' => t('Conversion Language'),
+      '#title' => $this->t('Conversion Language'),
       '#default_value' => \Drupal::config('google_adwords.settings')->get('google_adwords_conversion_language'),
       '#size' => 15,
       '#maxlength' => 255,
@@ -69,7 +69,7 @@ class GoogleAdwordsAdminSettings extends ConfigFormBase {
     );
     $form['conversion']['google_adwords_conversion_format'] = array(
       '#type' => 'textfield',
-      '#title' => t('Conversion Format'),
+      '#title' => $this->t('Conversion Format'),
       '#default_value' => \Drupal::config('google_adwords.settings')->get('google_adwords_conversion_format'),
       '#size' => 15,
       '#maxlength' => 255,
@@ -78,7 +78,7 @@ class GoogleAdwordsAdminSettings extends ConfigFormBase {
     );
     $form['conversion']['google_adwords_conversion_color'] = array(
       '#type' => 'textfield',
-      '#title' => t('Conversion Color'),
+      '#title' => $this->t('Conversion Color'),
       '#default_value' => \Drupal::config('google_adwords.settings')->get('google_adwords_conversion_color'),
       '#size' => 15,
       '#maxlength' => 255,
@@ -87,7 +87,7 @@ class GoogleAdwordsAdminSettings extends ConfigFormBase {
     );
     $form['conversion']['google_adwords_external_script'] = array(
       '#type' => 'textfield',
-      '#title' => t('External JavaScript'),
+      '#title' => $this->t('External JavaScript'),
       '#default_value' => \Drupal::config('google_adwords.settings')->get('google_adwords_external_script'),
       '#size' => 80,
       '#maxlength' => 255,
@@ -98,9 +98,9 @@ class GoogleAdwordsAdminSettings extends ConfigFormBase {
     // Render the role overview.       
     $form['conversion']['roles'] = array(
       '#type' => 'fieldset',
-      '#title' => t('User Role Tracking'),
+      '#title' => $this->t('User Role Tracking'),
       '#collapsible' => TRUE,
-      '#description' => t('Define what user roles should be tracked.'),
+      '#description' => $this->t('Define what user roles should be tracked.'),
     );
     
     $prefix = 'user.role.';
@@ -114,7 +114,7 @@ class GoogleAdwordsAdminSettings extends ConfigFormBase {
       $role_name = $config->get('label');      
       $form['conversion']['roles']['google_adwords_track_' . $rid] = array(
         '#type' => 'checkbox',
-        '#title' => t($role_name),
+        '#title' => $this->t($role_name),
         '#default_value' => // @FIXME: &#039;google_adwords_track_&#039; . $role_varname must be added to your module's default configuration.
         \Drupal::config('google_adwords.settings')->get('google_adwords_track_' . $role_varname),
       );
