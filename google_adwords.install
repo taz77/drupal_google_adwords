@@ -5,21 +5,18 @@
  * Install, update, and uninstall functions for the Google Adwords module.
  */
 
+use Drupal\Core\Url;
+
 /**
  * Implements hook_install().
  */
 function google_adwords_install() {
-  // @TODO  These needs rewritten using l().
-//  $t = get_t();
-//
-  // @FIXME
-
   drupal_set_message(
-    t('Google AdWords module installed successfully. You must <a href="@fields">configure a Google Adwords Tracking field</a>. You can set <a href="@permissions">permissions</a> and <a href="@configuration">configure</a> the module.'), [
-    '@permissions' => \Drupal\Core\Url::fromRoute('user.admin_permissions'),
-//    '@configuration' => url('admin/config/system/google_adwords'),
-//    '@fields' => url('admin/structure/types'),
-  ]);
+    t('Google AdWords module installed successfully. You must <a href=":fields_url">configure a Google Adwords Tracking field</a>. You can set <a href=":permissions_url">permissions</a> and <a href=":configuration_url">configure</a> for the module.', [
+      ':permissions_url' => Url::fromRoute('user.admin_permissions')->toString(),
+      ':configuration_url' => Url::fromRoute('google_adwords.admin_settings')->toString(),
+      ':fields_url' => '/admin/structure/types',
+    ]));
 }
 
 /**

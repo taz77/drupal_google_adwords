@@ -5,7 +5,7 @@ namespace Drupal\google_adwords\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
-use \Drupal\user\RoleInterface;
+use Drupal\user\RoleInterface;
 use Drupal\Core\Session;
 use Drupal\user\Entity\Role;
 
@@ -16,6 +16,15 @@ class GoogleAdwordsAdminSettings extends ConfigFormBase {
    */
   public function getFormId() {
     return 'google_adwords_admin_settings';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEditableConfigNames() {
+    return [
+      'google_adwords.settings',
+    ];
   }
 
   /**
