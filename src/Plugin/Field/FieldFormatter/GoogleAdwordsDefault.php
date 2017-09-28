@@ -11,7 +11,7 @@ use Drupal\Core\Field\FormatterBase;
  *  field_types = {"google_adwords_tracking"}
  * )
  */
-class GoogleAdwordsDefault extends FormatterBase {
+abstract class GoogleAdwordsDefault extends FormatterBase {
 
   /**
    * @FIXME
