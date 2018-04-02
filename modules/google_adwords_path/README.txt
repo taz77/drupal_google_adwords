@@ -6,8 +6,8 @@ want to track for advanced ROI reports with Google Adwords
 REQUIREMENTS
 ------------
 * Google Adwords Module
-* Google Adwords Acccount
-* An existing converstion tracking in your Google Adwords account (you will
+* Google Adwords Account
+* An existing conversion tracking in your Google Adwords account (you will
 need the information from this to complete setup)
 
 INSTALLATION INSTRUCTIONS
