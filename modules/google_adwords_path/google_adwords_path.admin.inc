@@ -25,16 +25,16 @@ function google_adwords_path_admin_page() {
   $count = 1;
   foreach ($codes as $code) {
     // @FIXME
-// $rows[] = array(
-//       array('data' => $count),
-//       array('data' => $code['name']),
-//       array('data' => $code['conversion_id']),
-//       array('data' => $code['conversion_language']),
-//       array('data' => $code['conversion_format']),
-//       array('data' => $code['conversion_color']),
-//       array('data' => $code['conversion_label']),
-//       array('data' => l(t('edit'), 'admin/config/system/google_adwords/path/' . $code['cid'] . '/edit') . ' ' . l(t('delete'), 'admin/config/system/google_adwords/path/' . $code['cid'] . '/delete')),
-//     );
+    // $rows[] = array(
+    //       array('data' => $count),
+    //       array('data' => $code['name']),
+    //       array('data' => $code['conversion_id']),
+    //       array('data' => $code['conversion_language']),
+    //       array('data' => $code['conversion_format']),
+    //       array('data' => $code['conversion_color']),
+    //       array('data' => $code['conversion_label']),
+    //       array('data' => l(t('edit'), 'admin/config/system/google_adwords/path/' . $code['cid'] . '/edit') . ' ' . l(t('delete'), 'admin/config/system/google_adwords/path/' . $code['cid'] . '/delete')),
+    //     );
 
     $count++;
   }
@@ -44,8 +44,8 @@ function google_adwords_path_admin_page() {
   }
   else {
     // @FIXME
-// l() expects a Url object, created from a route name or external URI.
-// return '<p>' . t('No conversion code yet. !add_link?', array('!add_link' => l(t('Add one'), 'admin/config/system/google_adwords/path/add'))) . '</p>';
+    // l() expects a Url object, created from a route name or external URI.
+    // return '<p>' . t('No conversion code yet. !add_link?', array('!add_link' => l(t('Add one'), 'admin/config/system/google_adwords/path/add'))) . '</p>';
 
   }
 }
@@ -84,37 +84,37 @@ function google_adwords_path_code_form($form, $form_state, $cid = NULL) {
     '#required' => TRUE,
   ];
   // @FIXME
-// $form['conversion_language'] = array(
-//     '#type' => 'textfield',
-//     '#title' => t('Conversion Language'),
-//     '#default_value' => isset($code) ? $code['conversion_language'] : // @FIXME: This looks like another module's variable. Rewrite the call to use the correct configuration set.
-// variable_get('google_adwords_conversion_language', $language->language),
-//     '#size' => 15,
-//     '#maxlength' => 64,
-//     '#required' => TRUE,
-//   );
+  // $form['conversion_language'] = array(
+  //     '#type' => 'textfield',
+  //     '#title' => t('Conversion Language'),
+  //     '#default_value' => isset($code) ? $code['conversion_language'] : // @FIXME: This looks like another module's variable. Rewrite the call to use the correct configuration set.
+  // variable_get('google_adwords_conversion_language', $language->language),
+  //     '#size' => 15,
+  //     '#maxlength' => 64,
+  //     '#required' => TRUE,
+  //   );
 
   // @FIXME
-// $form['conversion_format'] = array(
-//     '#type' => 'textfield',
-//     '#title' => t('Conversion Format'),
-//     '#default_value' => isset($code) ? $code['conversion_format'] : // @FIXME: This looks like another module's variable. Rewrite the call to use the correct configuration set.
-// variable_get('google_adwords_conversion_format', '2'),
-//     '#size' => 15,
-//     '#maxlength' => 64,
-//     '#required' => TRUE,
-//   );
+  // $form['conversion_format'] = array(
+  //     '#type' => 'textfield',
+  //     '#title' => t('Conversion Format'),
+  //     '#default_value' => isset($code) ? $code['conversion_format'] : // @FIXME: This looks like another module's variable. Rewrite the call to use the correct configuration set.
+  // variable_get('google_adwords_conversion_format', '2'),
+  //     '#size' => 15,
+  //     '#maxlength' => 64,
+  //     '#required' => TRUE,
+  //   );
 
   // @FIXME
-// $form['conversion_color'] = array(
-//     '#type' => 'textfield',
-//     '#title' => t('Conversion Color'),
-//     '#default_value' => isset($code) ? $code['conversion_color'] : // @FIXME: This looks like another module's variable. Rewrite the call to use the correct configuration set.
-// variable_get('google_adwords_conversion_color', 'FFFFFF'),
-//     '#size' => 15,
-//     '#maxlength' => 64,
-//     '#required' => TRUE,
-//   );
+  // $form['conversion_color'] = array(
+  //     '#type' => 'textfield',
+  //     '#title' => t('Conversion Color'),
+  //     '#default_value' => isset($code) ? $code['conversion_color'] : // @FIXME: This looks like another module's variable. Rewrite the call to use the correct configuration set.
+  // variable_get('google_adwords_conversion_color', 'FFFFFF'),
+  //     '#size' => 15,
+  //     '#maxlength' => 64,
+  //     '#required' => TRUE,
+  //   );
 
   $form['conversion_label'] = [
     '#type' => 'textfield',
