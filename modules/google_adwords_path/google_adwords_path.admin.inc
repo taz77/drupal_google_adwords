@@ -5,6 +5,8 @@
  * Admin page for Google Adwords Path.
  */
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
 /**
  * Admin page listing down all Google Adwords Path conversion codes.
  */
@@ -168,10 +170,14 @@ function google_adwords_path_code_form_submit($form, &$form_state) {
     drupal_set_message(t($message, ['%name' => $form_state['values']['name']]));
 
     // Redirect back to Google Adwords Path admin page.
-    drupal_goto('admin/config/system/google_adwords/path');
+    $path = 'admin/config/system/google_adwords/path';
+    $response = new RedirectResponse($path);
+    $response->send();
   }
   elseif ($form_state['clicked_button']['#value'] == 'Delete') {
-    drupal_goto('admin/config/system/google_adwords/path/' . $form_state['values']['cid'] . '/delete');
+    $path = 'admin/config/system/google_adwords/path/' . $form_state['values']['cid'] . '/delete';
+    $response = new RedirectResponse($path);
+    $response->send();
   }
 }
 
@@ -207,7 +213,7 @@ function google_adwords_path_code_delete_form_submit($form, &$form_state) {
   }
 
   drupal_set_message(t($message, ['%name' => $form_state['values']['name']]));
-
-
-  drupal_goto('admin/config/system/google_adwords/path');
+  $path = 'admin/config/system/google_adwords/path';
+  $response = new RedirectResponse($path);
+  $response->send();
 }

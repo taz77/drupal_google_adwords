@@ -10,6 +10,7 @@ namespace Drupal\google_adwords_path\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class GoogleAdwordsPathCodeDeleteForm extends FormBase {
 
@@ -47,7 +48,8 @@ class GoogleAdwordsPathCodeDeleteForm extends FormBase {
 
     drupal_set_message(t($message, ['%name' => $form_state->getValues()['name']]));
 
-
-    drupal_goto('admin/config/system/google_adwords/path');
+    $path = 'admin/config/system/google_adwords/path';
+    $response = new RedirectResponse($path);
+    $response->send();
   }
 }

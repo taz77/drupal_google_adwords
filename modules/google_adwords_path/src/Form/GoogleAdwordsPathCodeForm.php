@@ -133,10 +133,14 @@ class GoogleAdwordsPathCodeForm extends FormBase {
       drupal_set_message(t($message, ['%name' => $form_state->getValues()['name']]));
 
       // Redirect back to Google Adwords Path admin page.
-      drupal_goto('admin/config/system/google_adwords/path');
+      $path = 'admin/config/system/google_adwords/path';
+      $response = new RedirectResponse($path);
+      $response->send();
     }
     elseif ($form_state['clicked_button']['#value'] == 'Delete') {
-      drupal_goto('admin/config/system/google_adwords/path/' . $form_state->getValues()['cid'] . '/delete');
+      $path = 'admin/config/system/google_adwords/path/' . $form_state->getValues()['cid'] . '/delete';
+      $response = new RedirectResponse($path);
+      $response->send();
     }
   }
 }
