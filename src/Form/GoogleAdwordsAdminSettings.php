@@ -45,7 +45,7 @@ class GoogleAdwordsAdminSettings extends ConfigFormBase {
     parent::submitForm($form, $form_state);
   }
 
-  public function buildForm(array $form_state, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
 
     $form['conversion'] = [
       '#type' => 'fieldset',
