@@ -5,75 +5,14 @@
  * Install, update, and uninstall functions for the Google Adwords module.
  */
 
-use Drupal\Core\Url;
-
 /**
  * Implements hook_install().
  */
 function google_adwords_install() {
   drupal_set_message(
-    t('Google AdWords module installed successfully. You must <a href=":fields_url">configure a Google Adwords Tracking field</a>. You can set <a href=":permissions_url">permissions</a> and <a href=":configuration_url">configure</a> for the module.', [
-      ':permissions_url' => Url::fromRoute('user.admin_permissions')->toString(),
-      ':configuration_url' => Url::fromRoute('google_adwords.admin_settings')->toString(),
-      ':fields_url' => '/admin/structure/types',
-    ]));
-}
-
-/**
- * Implements hook_uninstall().
- */
-function google_adwords_uninstall() {
-  // Remove variables.
-  // @FIXME
-// db_delete('variable')
-//     ->condition('name', 'google_adwords%', 'LIKE')
-//     ->execute();
-}
-
-/**
- * Implements hook_field_schema().
- */
-function google_adwords_field_schema($field) {
-  return [
-    'columns' => [
-      'conversion_id' => [
-        'description' => 'The conversion id.',
-        'type' => 'varchar',
-        'length' => 255,
-        'default' => '',
-        'not null' => FALSE,
-      ],
-      'conversion_language' => [
-        'description' => 'The conversion language.',
-        'type' => 'varchar',
-        'length' => 255,
-        'default' => '',
-        'not null' => FALSE,
-      ],
-      'conversion_format' => [
-        'description' => 'The conversion format.',
-        'type' => 'varchar',
-        'length' => 255,
-        'default' => '',
-        'not null' => FALSE,
-      ],
-      'conversion_color' => [
-        'description' => 'The conversion color.',
-        'type' => 'varchar',
-        'length' => 255,
-        'default' => '',
-        'not null' => FALSE,
-      ],
-      'conversion_label' => [
-        'description' => 'The conversion label.',
-        'type' => 'varchar',
-        'length' => 255,
-        'default' => '',
-        'not null' => FALSE,
-      ],
-    ],
-    'indexes' => [
-      'conv_id' => ['conversion_id'],
-    ],
-  ];
+     t('Google AdWords module installed successfully. You must <a href="@fields">configure a Google Adwords Tracking field</a>. You can set <a href="@permissions">permissions</a> and <a href="@configuration">configure</a> the module.'), array(
+    '@permissions' => \Drupal\Core\Url::fromRoute('user.admin_permissions'),
+    '@configuration' => \Drupal\Core\Url::fromRoute('google_adwords.admin_settings'),
+//    '@fields' => url('admin/structure/types'),
+  ));
 }

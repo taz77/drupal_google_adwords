@@ -1,27 +1,54 @@
 <?php
 
+/**
+ * @file
+ * Contains \Drupal\google_adwords\Plugin\Field\FieldWidget\GoogleAdwordsText.
+ */
+
 namespace Drupal\google_adwords\Plugin\Field\FieldWidget;
 
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
- * @FieldFormatter(
- *  id = "google_adwords_text",
- *  label = @Translation("Google AdWords Text Field"),
- *  field_types = {"google_adwords_tracking"}
+ * Plugin implementation of the 'google_adwords_text' widget.
+ *
+ * @FieldWidget(
+ *   id = "google_adwords_text",
+ *   label = @Translation("Google AdWords text"),
+ *   field_types = {
+ *     "google_adwords_tracking"
+ *   }
  * )
  */
 class GoogleAdwordsText extends WidgetBase {
+  /**
+   * {@inheritdoc}
+   */
+  public static function defaultSettings() {
+    return array(
+      'size' => 60,
+      'placeholder' => 'Google AdWords tracking words',
+    ) + parent::defaultSettings();
+  }
 
   /**
-   * @FIXME
-   * Move all logic relating to the google_adwords_text widget into this class.
-   * For more information, see:
-   *
-   * https://www.drupal.org/node/1796000
-   * https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Field%21WidgetInterface.php/interface/WidgetInterface/8
-   * https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Field%21WidgetBase.php/class/WidgetBase/8
-   *
+   * {@inheritdoc}
    */
+  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+    $element = [];
+
+    $element['words'] = $element + array(
+      '#type' => 'textfield',
+      '#title' => $this->getSetting('placeholder'),
+      '#default_value' => isset($items[$delta]->words) ? $items[$delta]->words : NULL,
+      '#size' => $this->getSetting('size'),
+      '#placeholder' => $this->getSetting('placeholder'),
+      '#maxlength' => $this->getFieldSetting('max_length'),
+    );
+
+    return $element;
+  }
 
 }

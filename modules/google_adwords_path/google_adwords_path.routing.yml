@@ -1,22 +1,41 @@
-google_adwords_path.admin_page:
-  path: /admin/config/system/google_adwords/path
+
+# GoogleAdwordsPathConfig routing definition
+entity.google_adwords_path_config.collection:
+  path: '/admin/config/system/google_adwords/path'
   defaults:
-    _title: 'Adwords by Path'
-    _content: '\Drupal\google_adwords_path\Controller\DefaultController::google_adwords_path_admin_page'
+    _entity_list: 'google_adwords_path_config'
+    _title: 'Google AdWords Path Config'
   requirements:
-    _permission: 'administer nodes'
-google_adwords_path.code_form:
-  path: '/admin/config/system/google_adwords/path/{cid}/edit'
+    _permission: 'administer site configuration'
+  options:
+    _admin_route: TRUE
+
+entity.google_adwords_path_config.add_form:
+  path: '/admin/config/system/google_adwords/path/add'
   defaults:
-    cid: null
-    _title: 'Edit conversion code'
-    _form: \Drupal\google_adwords_path\Form\GoogleAdwordsPathCodeForm
+    _entity_form: 'google_adwords_path_config.add'
+    _title: 'Add Google AdWords Path Config'
   requirements:
-    _permission: 'administer nodes'
-google_adwords_path.code_delete_form:
-  path: '/admin/config/system/google_adwords/path/{cid}/delete'
+    _permission: 'administer site configuration'
+  options:
+    _admin_route: TRUE
+
+entity.google_adwords_path_config.edit_form:
+  path: '/admin/config/system/google_adwords/path/{google_adwords_path_config}'
   defaults:
-    _title: 'Delete conversion code'
-    _form: \Drupal\google_adwords_path\Form\GoogleAdwordsPathCodeDeleteForm
+    _entity_form: 'google_adwords_path_config.edit'
+    _title: 'Edit Google AdWords Path Config'
   requirements:
-    _permission: 'administer nodes'
+    _permission: 'administer site configuration'
+  options:
+    _admin_route: TRUE
+
+entity.google_adwords_path_config.delete_form:
+  path: '/admin/config/system/google_adwords/path/{google_adwords_path_config}/delete'
+  defaults:
+    _entity_form: 'google_adwords_path_config.delete'
+    _title: 'Delete Google AdWords Path Config'
+  requirements:
+    _permission: 'administer site configuration'
+  options:
+    _admin_route: TRUE

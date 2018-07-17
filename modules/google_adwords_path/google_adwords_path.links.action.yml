@@ -1,5 +1,6 @@
-google_adwords_path.code_form:
-  route_name: google_adwords_path.code_form
-  title: 'Add conversion code'
+
+entity.google_adwords_path_config.add_form:
+  route_name: 'entity.google_adwords_path_config.add_form'
+  title: 'Add Google AdWords Path Config'
   appears_on:
-    - google_adwords_path.code_form
+    - entity.google_adwords_path_config.collection

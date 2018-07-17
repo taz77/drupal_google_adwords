@@ -2,13 +2,13 @@ google_adwords.settings:
   type: mapping
   label: Settings
   mapping:
-    google_adwords_conversion_language:
+    language:
       type: string
-    google_adwords_conversion_format:
+    format:
       type: string
-    google_adwords_conversion_color:
+    color:
       type: string
-    google_adwords_conversion_id:
+    conversion_id:
       type: string
-    google_adwords_external_script:
+    external_script:
       type: string
